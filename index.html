@@ -41,8 +41,8 @@ input,button{font:inherit}input[type=text]{width:100%;border:1px solid var(--lin
 </main>
 <nav class="nav">
 <button class="active" data-view="feedView">🏠 হোম</button><button data-view="searchView">🔎 খুঁজুন</button><button data-view="profileView">👤 প্রোফাইল</button>
-</nav>
-<script>
+</nav> 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 const KEY='swajanSomabeshPostsV1';
 const starter=[
 {id:1,author:'স্বজন সমাবেশ কমিউনিটি',time:'নমুনা পোস্ট',text:'আমাদের বন্ধন হোক আরও দৃঢ়। নিজের এলাকার ভালো খবর, অভিজ্ঞতা ও উপকারী তথ্য সবার সঙ্গে শেয়ার করুন।',likes:2,liked:false,comments:['স্বাগতম স্বজন সমাবেশে!']},

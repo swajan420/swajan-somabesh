@@ -538,15 +538,21 @@ document.addEventListener('click', async e => {
     }  
   }  
 });  
+  // প্রাথমিক সেশন পরীক্ষা
+(async () => {
+  const {data} = await supabaseClient.auth.getSession();
+  await updateSession(data.session);
+
+  supabaseClient.auth.onAuthStateChange((event, session) => {
+    // ইমেইল কনফার্ম করে ফিরে আসলে বা টোকেন রিফ্রেশ হলে পেজ আপডেট হবে
+    if (event === 'SIGNED_IN' || event === 'TOKEN_REFRESHED' || event === 'USER_UPDATED') {
+      updateSession(session);
+    } else {
+      setTimeout(() => updateSession(session), 0);
+    }
+  });
+})();
+
   
-// প্রাথমিক সেশন পরীক্ষা  
-(async () => {  
-  const {data} = await supabaseClient.auth.getSession();  
-  await updateSession(data.session);  
-  
-  supabaseClient.auth.onAuthStateChange((_event, session) => {  
-    setTimeout(() => updateSession(session), 0);  
-  });  
-})();  
 </script>  </body>  
   </html>

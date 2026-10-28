@@ -1,559 +1,380 @@
 <!doctype html>
+<html lang="bn">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#145c46">
+<title>স্বজন সমাবেশ | Swajan Somabesh</title>
+<style>
+:root {
+  --green:#145c46;
+  --mint:#e4f2eb;
+  --bg:#f3f6f4;
+  --ink:#1c2923;
+  --muted:#68766f;
+  --line:#e1e8e3;
+}
+* { box-sizing:border-box; }
+body {
+  margin:0;
+  background:var(--bg);
+  color:var(--ink);
+  font:16px system-ui,-apple-system,"Noto Sans Bengali",sans-serif;
+}
+header {
+  background:var(--green);
+  color:white;
+  padding:18px 16px;
+  position:sticky;
+  top:0;
+  z-index:2;
+  box-shadow:0 2px 8px #0001;
+}
+.head {
+  max-width:760px;
+  margin:auto;
+  display:flex;
+  align-items:center;
+  gap:12px;
+}
+.logo {
+  width:44px;
+  height:44px;
+  border-radius:14px;
+  background:#ffffff24;
+  display:grid;
+  place-items:center;
+  font-size:25px;
+}
+.brand { font-weight:800; font-size:20px; }
+.tag { font-size:12px; color:#d4f0e4; }
+.wrap {
+  max-width:760px;
+  margin:16px auto;
+  padding:0 12px 90px;
+}
+.card {
+  background:white;
+  border:1px solid var(--line);
+  border-radius:17px;
+  padding:15px;
+  margin-bottom:13px;
+  box-shadow:0 2px 8px #183a2910}
+.row { display:flex; align-items:center; gap:10px; }
+.grow { flex:1; }
+.avatar {
+  width:40px;
+  height:40px;
+  border-radius:50%;
+  background:var(--mint);
+  color:var(--green);
+  display:grid;
+  place-items:center;
+  font-weight:800;
+  flex-shrink:0;
+}
+h1,h2,p { margin:0; }
+h2 { font-size:17px; }
+.muted { color:var(--muted); font-size:13px; }
+textarea {
+  width:100%;
+  border:1px solid var(--line);
+  border-radius:12px;
+  outline:0;
+  resize:vertical;
+  min-height:82px;
+  font:inherit;
+  padding:12px;
+}
+input,button { font:inherit; }
+input[type=text],
+input[type=email],
+input[type=password] {
+  width:100%;
+  border:1px solid var(--line);
+  border-radius:12px;
+  padding:11px;
+  background:#fff;
+  margin:5px 0;
+}
+.btn {
+  border:0;
+  border-radius:12px;
+  padding:10px 14px;
+  background:var(--green);
+  color:white;
+  font-weight:700;
+  cursor:pointer;
+}
+.btn.light { background:var(--mint); color:var(--green); }
+.tools {
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  border-top:1px solid var(--line);
+  padding-top:10px;
+  margin-top:10px;
+  gap:8px;
+  flex-wrap:wrap;
+}
+.postbody {
+  white-space:pre-wrap;
+  line-height:1.55;
+  margin:13px 0;
+}
+.actions {
+  display:flex;
+  gap:8px;
+  border-top:1px solid var(--line);
+  padding-top:10px;
+  flex-wrap:wrap;
+}
+.action {
+  border:0;
+  background:#f5f8f6;
+  padding:8px 12px;
+  border-radius:10px;
+  color:#33443b;
+  cursor:pointer;
+}
+.action.on { background:var(--mint); color:var(--green); font-weight:700; }
+.commentbox { display:flex; gap:8px; margin-top:10px; }
+.commentbox input { flex:1; min-width:0; }
+.comments { margin-top:10px; font-size:14px; }
+.comment { background:#f6f8f7; border-radius:10px; padding:8px 10px; margin-top:6px; }
+.notice { font-size:12px; color:var(--muted); line-height:1.5; }
+.empty { text-align:center; padding:25px; color:var(--muted); }
+.hidden { display:none!important; }
+.nav {
+  position:fixed;
+  bottom:0;
+  left:0;
+  right:0;
+  background:#fff;
+  border-top:1px solid var(--line);
+  display:flex;
+  justify-content:center;
+  gap:8px;
+  padding:9px 8px calc(9px + env(safe-area-inset-bottom));
+  z-index:3;
+}
+.nav button {
+  background:white;
+  border:0;
+  color:var(--muted);
+  padding:8px 12px;
+  border-radius:12px;
+  cursor:pointer;
+}
+.nav button.active {
+  background:var(--mint);
+  color:var(--green);
+  font-weight:800;
+}
+.status { font-size:13px; margin-top:8px; color:var(--muted); }
+@media(min-width:600px) {
+  .wrap { margin-top:22px; }
+  .card { padding:18px; }
+}
+</style>
+</head>
+<body>
 
-<html lang="bn">  
-<head>  
-<meta charset="utf-8">  
-<meta name="viewport" content="width=device-width,initial-scale=1">  
-<meta name="theme-color" content="#145c46">  
-<title>স্বজন সমাবেশ | Swajan Somabesh</title>  
-<style>  
-:root {  
-  --green:#145c46;  
-  --mint:#e4f2eb;  
-  --bg:#f3f6f4;  
-  --ink:#1c2923;  
-  --muted:#68766f;  
-  --line:#e1e8e3;  
-}  
-* { box-sizing:border-box; }  
-body {  
-  margin:0;  
-  background:var(--bg);  
-  color:var(--ink);  
-  font:16px system-ui,-apple-system,"Noto Sans Bengali",sans-serif;  
-}  
-header {  
-  background:var(--green);  
-  color:white;  
-  padding:18px 16px;  
-  position:sticky;  
-  top:0;  
-  z-index:2;  
-  box-shadow:0 2px 8px #0001;  
-}  
-.head {  
-  max-width:760px;  
-  margin:auto;  
-  display:flex;  
-  align-items:center;  
-  gap:12px;  
-}  
-.logo {  
-  width:44px;  
-  height:44px;  
-  border-radius:14px;  
-  background:#ffffff24;  
-  display:grid;  
-  place-items:center;  
-  font-size:25px;  
-}  
-.brand { font-weight:800; font-size:20px; }  
-.tag { font-size:12px; color:#d4f0e4; }  
-.wrap {  
-  max-width:760px;  
-  margin:16px auto;  
-  padding:0 12px 90px;  
-}  
-.card {  
-  background:white;  
-  border:1px solid var(--line);  
-  border-radius:17px;  
-  padding:15px;  
-  margin-bottom:13px;  
-  box-shadow:0 2px 8px #183a2910;  
-}  
-.row { display:flex; align-items:center; gap:10px; }  
-.grow { flex:1; }  
-.avatar {  
-  width:40px;  
-  height:40px;  
-  border-radius:50%;  
-  background:var(--mint);  
-  color:var(--green);  
-  display:grid;  
-  place-items:center;  
-  font-weight:800;  
-  flex-shrink:0;  
-}  
-h1,h2,p { margin:0; }  
-h2 { font-size:17px; }  
-.muted { color:var(--muted); font-size:13px; }  
-textarea {  
-  width:100%;  
-  border:1px solid var(--line);  
-  border-radius:12px;  
-  outline:0;  
-  resize:vertical;  
-  min-height:82px;  
-  font:inherit;  
-  padding:12px;  
-}  
-input,button { font:inherit; }  
-input[type=text],  
-input[type=email],  
-input[type=password] {  
-  width:100%;  
-  border:1px solid var(--line);  
-  border-radius:12px;  
-  padding:11px;  
-  background:#fff;  
-  margin:5px 0;  
-}  
-.btn {  
-  border:0;  
-  border-radius:12px;  
-  padding:10px 14px;  
-  background:var(--green);  
-  color:white;  
-  font-weight:700;  
-  cursor:pointer;  
-}  
-.btn.light { background:var(--mint); color:var(--green); }  
-.tools {  
-  display:flex;  
-  justify-content:space-between;  
-  align-items:center;  
-  border-top:1px solid var(--line);  
-  padding-top:10px;  
-  margin-top:10px;  
-  gap:8px;  
-  flex-wrap:wrap;  
-}  
-.postbody {  
-  white-space:pre-wrap;  
-  line-height:1.55;  
-  margin:13px 0;  
-}  
-.actions {  
-  display:flex;  
-  gap:8px;  
-  border-top:1px solid var(--line);  
-  padding-top:10px;  
-  flex-wrap:wrap;  
-}  
-.action {  
-  border:0;  
-  background:#f5f8f6;  
-  padding:8px 12px;  
-  border-radius:10px;  
-  color:#33443b;  
-  cursor:pointer;  
-}  
-.notice { font-size:12px; color:var(--muted); line-height:1.5; }  
-.empty { text-align:center; padding:25px; color:var(--muted); }  
-.hidden { display:none!important; }  
-.nav {  
-  position:fixed;  
-  bottom:0;  
-  left:0;  
-  right:0;  
-  background:#fff;  
-  border-top:1px solid var(--line);  
-  display:flex;  
-  justify-content:center;  
-  gap:8px;  
-  padding:9px 8px calc(9px + env(safe-area-inset-bottom));  
-  z-index:3;  
-}  
-.nav button {  
-  background:white;  
-  border:0;  
-  color:var(--muted);  
-  padding:8px 12px;  
-  border-radius:12px;  
-  cursor:pointer;  
-}  
-.nav button.active {  
-  background:var(--mint);  
-  color:var(--green);  
-  font-weight:800;  
-}  
-.status { font-size:13px; margin-top:8px; color:var(--muted); }  
-@media(min-width:600px) {  
-  .wrap { margin-top:22px; }  
-  .card { padding:18px; }  
-}  
-</style>  
-</head>  
-<body>  <header>  
-  <div class="head">  
-    <div class="logo">🤝</div>  
-    <div class="grow">  
-      <div class="brand">স্বজন সমাবেশ</div>  
-      <div class="tag">Swajan Somabesh · মানুষের সঙ্গে মানুষের সংযোগ</div>  
-    </div>  
-  </div>  
-</header>  <main class="wrap">  <section id="authCard" class="card">  
-  <h2 id="authTitle">সদস্য লগইন / নতুন অ্যাকাউন্ট</h2>  
-  <p class="muted" style="margin:6px 0 10px">  
-    পোস্ট দেখতে ও লিখতে আগে লগইন করুন।  
-  </p>    <div id="signupFields">  
-    <input id="displayName" type="text" maxlength="60"  
-      placeholder="আপনার নাম (নতুন অ্যাকাউন্টের জন্য)">  
-  </div>  <input id="email" type="email" autocomplete="email"  
-placeholder="ইমেইল ঠিকানা">
-<input id="password" type="password"  
-autocomplete="current-password" minlength="6"  
-placeholder="পাসওয়ার্ড (কমপক্ষে ৬ অক্ষর)">
+<header>
+  <div class="head">
+    <div class="logo">🤝</div>
+    <div class="grow">
+      <div class="brand">স্বজন সমাবেশ</div>
+      <div class="tag">Swajan Somabesh · মানুষের সঙ্গে মানুষের সংযোগ</div>
+    </div>
+  </div>
+</header>
 
-  <div class="tools">  
-    <button class="btn" id="loginBtn">লগইন</button>  
-    <button class="btn light" id="signupBtn">নতুন অ্যাকাউন্ট খুলুন</button>  
-  </div>  
-  <div id="authStatus" class="status" role="status"></div>  
-</section>  <section id="feedView" class="hidden">  
-  <div class="card">  
-    <div class="row">  
-      <div class="avatar">স</div>  
-      <div class="grow">  
-        <h2>আপনার নিউজ ফিড</h2>  
-        <div class="muted">সদস্যদের সবার পোস্ট এখানে দেখা যাবে</div>  
-      </div>  
-      <button class="btn light" id="logoutBtn">লগআউট</button>  
-    </div>  
-    <div id="signedInAs" class="status"></div>  
-  </div>    <div class="card">  
-    <textarea id="postText" maxlength="5000"  
-      placeholder="আপনার মনে কী আছে? লিখুন..."></textarea>  
-    <div class="tools">  
-      <span class="muted">🌿 সম্মানজনক ও উপকারী পোস্ট করুন</span>  
-      <button class="btn" id="publish">পোস্ট করুন</button>  
-    </div>  
-    <div id="postStatus" class="status"></div>  
-  </div>    <div id="posts"></div>  
-  <p class="notice">  
-    এই সংস্করণে পোস্টগুলো Supabase ডাটাবেজে সংরক্ষিত হয়।  
-    Like ও মন্তব্য এখনো যুক্ত হয়নি।  
-  </p>  
-</section>  <section id="searchView" class="hidden">  
-  <div class="card">  
-    <h2 style="margin-bottom:10px">পোস্ট খুঁজুন</h2>  
-    <input id="searchInput" type="text"  
-      placeholder="পোস্টের লেখা দিয়ে খুঁজুন...">  
-  </div>  
-  <div id="searchResults"></div>  
-</section>  <section id="profileView" class="hidden">  
-  <div class="card">  
-    <div class="row">  
-      <div class="avatar" style="width:58px;height:58px;font-size:23px">স</div>  
-      <div>  
-        <h2>আপনার প্রোফাইল</h2>  
-        <div class="muted" id="profileEmail">  
-          লগইন করলে এখানে তথ্য দেখাবে  
-        </div>  
-      </div>  
-    </div>  
-    <p class="postbody">স্বজন সমাবেশ—মানুষের সঙ্গে মানুষের সংযোগ।</p>  
-  </div>  
-</section>  </main>  <nav class="nav">  
-  <button class="active" data-view="feedView">🏠 হোম</button>  
-  <button data-view="searchView">🔎 খুঁজুন</button>  
-  <button data-view="profileView">👤 প্রোফাইল</button>  
-</nav>  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>  <script>  
-// Supabase Project URL ও Publishable key  
-const SUPABASE_URL = 'https://bfbgzbpogeilcffrhqru.supabase.co';  
-const SUPABASE_PUBLISHABLE_KEY =  'sb_publishable_XoCQ72fZftVkdXfUBqP8OA_j7n21Gv9';  
-  
-const supabaseClient = window.supabase.createClient(  
-  SUPABASE_URL,  
-  SUPABASE_PUBLISHABLE_KEY  
-);  
-  
-let currentUser = null;  
-let allPosts = [];  
-  
-const $ = id => document.getElementById(id);  
-  
-function esc(s) {  
-  return String(s ?? '').replace(/[&<>"']/g, c => ({  
-    '&':'&amp;',  
-    '<':'&lt;',  
-    '>':'&gt;',  
-    '"':'&quot;',  
-    "'":'&#39;'  
-  }[c]));  
-}  
-  
-function authMessage(msg) {  
-  $('authStatus').textContent = msg;  
-}  
-  
-function postMessage(msg) {  
-  $('postStatus').textContent = msg;  
-}  
-  
-function showView(id) {  
-  ['feedView','searchView','profileView'].forEach(v =>  
-    $(v).classList.toggle('hidden', v !== id)  
-  );  
-  
-  document.querySelectorAll('[data-view]').forEach(b =>  
-    b.classList.toggle('active', b.dataset.view === id)  
-  );  
-  
-  if (id === 'searchView') doSearch();  
-}  
-  
-function drawPosts(items, target = 'posts') {  
-  const root = $(target);  
-  
-  if (!items.length) {  
-    root.innerHTML =  
-      '<div class="card empty">এখনো কোনো পোস্ট নেই। প্রথম পোস্টটি আপনিই করুন!</div>';  
-    return;  
-  }  
-  
-  root.innerHTML = items.map(p => `  
-    <article class="card">  
-      <div class="row">  
-        <div class="avatar">${esc((p.author || 'স').slice(0,1))}</div>  
-        <div class="grow">  
-          <h2>${esc(p.author || 'স্বজন সমাবেশ সদস্য')}</h2>  
-          <div class="muted">  
-            ${esc(new Date(p.created_at).toLocaleString('bn-BD'))}  
-          </div>  
-        </div>  
-      </div>  
-      <div class="postbody">${esc(p.content)}</div>  
-      <div class="actions">  
-        <button class="action" data-share="${esc(p.id)}">↗ Share</button>  
-      </div>  
-    </article>  
-  `).join('');  
-}  
-  
-async function loadPosts() {  
-  postMessage('পোস্ট লোড হচ্ছে…');  
-  
-  const {data, error} = await supabaseClient  
-    .from('posts')  
-    .select('id,user_id,author,content,created_at')  
-    .order('created_at', {ascending:false});  
-  
-  if (error) {  
-    postMessage('পোস্ট লোড করা যায়নি: ' + error.message);  
-    return;  
-  }  
-  
-  allPosts = data || [];  
-  drawPosts(allPosts);  
-  
-  if (!$('searchView').classList.contains('hidden')) {  
-    doSearch();  
-  }  
-  
-  postMessage('');  
-}  
-  
-async function updateSession(session) {  
-  currentUser = session?.user || null;  
-  
-  $('authCard').classList.toggle('hidden', !!currentUser);  
-  $('feedView').classList.toggle('hidden', !currentUser);  
-  
-  $('signedInAs').textContent = currentUser  
-    ? 'লগইন করেছেন: ' +  
-      (currentUser.user_metadata?.display_name || currentUser.email)  
-    : '';  
-  
-  $('profileEmail').textContent =  
-    currentUser?.email || 'লগইন করলে এখানে তথ্য দেখাবে';  
-  
-  if (currentUser) {  
-    showView('feedView');  
-    await loadPosts();  
-  } else {  
-    ['searchView','profileView'].forEach(v =>  
-      $(v).classList.add('hidden')  
-    );  
-    $('posts').innerHTML = '';  
-  }  
-}  
-  
-// নতুন অ্যাকাউন্ট তৈরি  
-$('signupBtn').addEventListener('click', async () => {  
-  const name = $('displayName').value.trim();  
-  const email = $('email').value.trim();  
-  const password = $('password').value;  
-  
-  if (!name) {  
-    authMessage('নতুন অ্যাকাউন্ট খুলতে আপনার নাম লিখুন।');  
-    return;  
-  }  
-  
-  if (!email || password.length < 6) {  
-    authMessage('সঠিক ইমেইল এবং কমপক্ষে ৬ অক্ষরের পাসওয়ার্ড দিন।');  
-    return;  
-  }  
-  
-  authMessage('অ্যাকাউন্ট তৈরি হচ্ছে…');  
-  
-  const {data, error} = await supabaseClient.auth.signUp({  
-    email,  
-    password,  
-    options: {  
-      data: {display_name:name},  
-      emailRedirectTo: 'https://github.io'  
-    }  
-  });  
-  
-  if (error) {  
-    authMessage('সমস্যা: ' + error.message);  
-    return;  
-  }  
-  
-  
-  if (data.session) {  
-    authMessage('অ্যাকাউন্ট তৈরি হয়েছে।');  
-    await updateSession(data.session);  
-  } else {  
-    authMessage(  
-      'নিবন্ধন হয়েছে। ইমেইলে আসা confirmation link-এ চাপ দিন, তারপর লগইন করুন।'  
-    );  
-  }  
-});  
-  
-// লগইন  
-$('loginBtn').addEventListener('click', async () => {  
-  const email = $('email').value.trim();  
-  const password = $('password').value;  
-  
-  if (!email || !password) {  
-    authMessage('ইমেইল ও পাসওয়ার্ড লিখুন।');  
-    return;  
-  }  
-  
-  authMessage('লগইন হচ্ছে…');  
-  
-  const {data, error} = await supabaseClient.auth.signInWithPassword({  
-    email,  
-    password  
-  });  
-  
-  if (error) {  
-    authMessage('লগইন হয়নি: ' + error.message);  
-    return;  
-  }  
-  
-  authMessage('লগইন সফল।');  
-  await updateSession(data.session);  
-});  
-  
-// লগআউট  
-$('logoutBtn').addEventListener('click', async () => {  
-  const {error} = await supabaseClient.auth.signOut();  
-  
-  if (error) {  
-    postMessage(error.message);  
-    return;  
-  }  
-  
-  await updateSession(null);  
-  authMessage('আপনি লগআউট করেছেন।');  
-});  
-  
-// নতুন পোস্ট প্রকাশ  
-$('publish').addEventListener('click', async () => {  
-  if (!currentUser) {  
-    postMessage('আগে লগইন করুন।');  
-    return;  
-  }  
-  
-  const content = $('postText').value.trim();  
-  
-  if (!content) {  
-    $('postText').focus();  
-    return;  
-  }  
-  
-  postMessage('পোস্ট প্রকাশ হচ্ছে…');  
-  
-  const author =  
-    currentUser.user_metadata?.display_name ||  
-    currentUser.email?.split('@')[0] ||  
-    'সদস্য';  
-  
-  const {error} = await supabaseClient  
-    .from('posts')  
-    .insert({  
-      user_id:currentUser.id,  
-      author,  
-      content  
-    });  
-  
-  if (error) {  
-    postMessage('পোস্ট করা যায়নি: ' + error.message);  
-    return;  
-  }  
-  
-  $('postText').value = '';  
-  postMessage('পোস্ট প্রকাশ হয়েছে।');  
-  await loadPosts();  
-});  
-  
-// পোস্ট সার্চ  
-function doSearch() {  
-  const q = ($('searchInput').value || '').toLowerCase().trim();  
-  
-  drawPosts(  
-    allPosts.filter(p =>  
-      ((p.content || '') + ' ' + (p.author || ''))  
-        .toLowerCase()  
-        .includes(q)  
-    ),  
-    'searchResults'  
-  );  
-}  
-  
-$('searchInput').addEventListener('input', doSearch);  
-  
-// নিচের নেভিগেশন  
-document.querySelectorAll('[data-view]').forEach(btn =>  
-  btn.addEventListener('click', () => showView(btn.dataset.view))  
-);  
-  
-// পোস্ট শেয়ার  
-document.addEventListener('click', async e => {  
-  const b = e.target.closest('[data-share]');  
-  if (!b) return;  
-  
-  const p = allPosts.find(x => String(x.id) === b.dataset.share);  
-  if (!p) return;  
-  
-  const content = `${p.author} — স্বজন সমাবেশ\n${p.content}`;  
-  
-  if (navigator.share) {  
-    try {  
-      await navigator.share({  
-        title:'স্বজন সমাবেশ',  
-        text:content  
-      });  
-    } catch (_) {}  
-  } else {  
-    try {  
-      await navigator.clipboard.writeText(content);  
-      alert('পোস্টের লেখা কপি হয়েছে।');  
-    } catch (_) {  
-      alert(content);  
-    }  
-  }  
-});  
-  // প্রাথমিক সেশন পরীক্ষা
-(async () => {
-  const {data} = await supabaseClient.auth.getSession();
-  await updateSession(data.session);
+<main class="wrap">
 
-  supabaseClient.auth.onAuthStateChange((event, session) => {
-    // ইমেইল কনফার্ম করে ফিরে আসলে বা টোকেন রিফ্রেশ হলে পেজ আপডেট হবে
-    if (event === 'SIGNED_IN' || event === 'TOKEN_REFRESHED' || event === 'USER_UPDATED') {
-      updateSession(session);
-    } else {
-      setTimeout(() => updateSession(session), 0);
-    }
-  });
-})();
+<section id="authCard" class="card">
+  <h2 id="authTitle">সদস্য লগইন / নতুন অ্যাকাউন্ট</h2>
+  <p class="muted" style="margin:6px 0 10px">
+    পোস্ট দেখতে ও লিখতে আগে লগইন করুন।
+  </p>
 
-  
-</script>  </body>  
-  </html>
-  
+  <div id="signupFields">
+    <input id="displayName" type="text" maxlength="60"
+      placeholder="আপনার নাম (নতুন অ্যাকাউন্টের জন্য)">
+  </div>
+
+  <input id="email" type="email" autocomplete="email"
+    placeholder="ইমেইল ঠিকানা">
+  <input id="password" type="password"
+    autocomplete="current-password" minlength="6"
+    placeholder="পাসওয়ার্ড (কমপক্ষে ৬ অক্ষর)">
+
+  <div class="tools">
+    <button class="btn" id="loginBtn">লগইন</button>
+    <button class="btn light" id="signupBtn">নতুন অ্যাকাউন্ট খুলুন</button>
+  </div>
+  <div id="authStatus" class="status" role="status"></div>
+</section>
+
+<section id="feedView" class="hidden">
+  <div class="card">
+    <div class="row">
+      <div class="avatar">স</div>
+      <div class="grow">
+        <h2>আপনার নিউজ ফিড</h2>
+        <div class="muted">সদস্যদের সবার পোস্ট এখানে দেখা যাবে</div>
+      </div>
+      <button class="btn light" id="logoutBtn">লগআউট</button>
+    </div>
+    <div id="signedInAs" class="status"></div>
+  </div>
+
+  <div class="card">
+    <textarea id="postText" maxlength="5000"
+      placeholder="আপনার মনে কী আছে? লিখুন..."></textarea>
+    <div class="tools">
+      <span class="muted">🌿 সম্মানজনক ও উপকারী পোস্ট করুন</span>
+      <button class="btn" id="publish">পোস্ট করুন</button>
+    </div>
+    <div id="postStatus" class="status"></div>
+  </div>
+
+  <div id="posts"></div>
+</section>
+
+<section id="searchView" class="hidden">
+  <div class="card">
+    <h2 style="margin-bottom:10px">পোস্ট খুঁজুন</h2>
+    <input id="searchInput" type="text"
+      placeholder="পোস্টের লেখা দিয়ে খুঁজুন...">
+  </div>
+  <div id="searchResults"></div>
+</section>
+
+<section id="profileView" class="hidden">
+  <div class="card">
+    <div class="row">
+      <div class="avatar" style="width:58px;height:58px;font-size:23px">স</div>
+      <div>
+        <h2>আপনার প্রোফাইল</h2>
+        <div class="muted" id="profileEmail">
+          লগইন করলে এখানে তথ্য দেখাবে
+        </div>
+      </div>
+    </div>
+    <p class="postbody">স্বজন সমাবেশ—মানুষের সঙ্গে মানুষের সংযোগ।</p>
+  </div>
+</section>
+
+</main>
+
+<nav class="nav">
+  <button class="active" data-view="feedView">🏠 হোম</button>
+  <button data-view="searchView">🔎 খুঁজুন</button>
+  <button data-view="profileView">👤 প্রোফাইল</button>
+</nav>
+
+<script src="https://jsdelivr.net"></script>
+<script>
+const SUPABASE_URL = 'https://supabase.co';
+const SUPABASE_PUBLISHABLE_KEY = 'sb_publishable_XoCQ72fZftVkdXfUBqP8OA_j7n21Gv9';
+
+const supabaseClient = window.supabase.createClient(
+  SUPABASE_URL,
+  SUPABASE_PUBLISHABLE_KEY
+);
+
+let currentUser = null;
+let allPosts = [];
+
+const $ = id => document.getElementById(id);
+
+function esc(s) {
+  return String(s ?? '').replace(/[&<>"']/g, c => ({
+    '&':'&amp;',
+    '<':'&lt;',
+    '>':'&gt;',
+    '"':'&quot;',
+    "'":'&#39;'
+  }[c]));
+}
+
+function authMessage(msg) {
+  $('authStatus').textContent = msg;
+}
+
+function postMessage(msg) {
+  $('postStatus').textContent = msg;
+}
+
+// লোকাল লাইক-কমেন্ট ডেটাবেজ লজিক
+const LIKE_KEY = 'swajan_likes_store';
+const COMM_KEY = 'swajan_comments_store';
+let localLikes = JSON.parse(localStorage.getItem(LIKE_KEY)) || {};
+let localComments = JSON.parse(localStorage.getItem(COMM_KEY)) || {};
+
+function saveLocalData() {
+  localStorage.setItem(LIKE_KEY, JSON.stringify(localLikes));
+  localStorage.setItem(COMM_KEY, JSON.stringify(localComments));
+}
+
+function showView(id) {
+  ['feedView','searchView','profileView'].forEach(v =>
+    $(v).classList.toggle('hidden', v !== id)
+  );
+  document.querySelectorAll('[data-view]').forEach(b =>
+    b.classList.toggle('active', b.dataset.view === id)
+  );
+  if (id === 'searchView') doSearch();
+}
+
+function drawPosts(items, target = 'posts') {
+  const root = $(target);
+  if (!items.length) {
+    root.innerHTML = '<div class="card empty">এখনো কোনো পোস্ট নেই। প্রথম পোস্টটি আপনিই করুন!</div>';
+    return;
+  }
+
+  root.innerHTML = items.map(p => {
+    const pLikes = localLikes[p.id] || { count: 0, liked: false };
+    const pComments = localComments[p.id] || [];
+    
+    return `
+    <article class="card">
+      <div class="row">
+        <div class="avatar">${esc((p.author || 'স').slice(0,1))}</div>
+        <div class="grow">
+          <h2>${esc(p.author || 'স্বজন সমাবেশ সদস্য')}</h2>
+          <div class="muted">${esc(new Date(p.created_at).toLocaleString('bn-BD'))}</div>
+        </div>
+      </div>
+      <div class="postbody">${esc(p.content)}</div>
+      
+      <div class="muted" style="margin-bottom:9px; font-size: 13px;">
+        ❤️ <span id="like-count-${p.id}">${pLikes.count}</span>টি প্রতিক্রিয়া · 💬 ${pComments.length}টি মন্তব্য
+      </div>
+      
+      <div class="actions">
+        <button class="action ${pLikes.liked ? 'on' : ''}" data-like="${p.id}">
+          ${pLikes.liked ? '❤️ পছন্দ করেছেন' : '♡ Like'}
+        </button>
+        <button class="action" data-focus="${p.id}">💬 Comment</button>
+        <button class="action" data-share="${esc(p.id)}">↗ Share</button>
+      </div>
+      
+      <div class="comments" id="comments-${p.id}" style="margin-top: 10px;">
+        ${pComments.map(c => `<div class="comment" style="background:#f6f8f7; border-radius:10px; padding:6px 10px; margin-top:4px; font-size:14px;">${esc(c)}</div>`).join('')}
+      </div>
+      
+      <form class="commentbox" data-comment="${p.id}" style="display:flex; gap:8px; margin-top:10px;">
+        <input name="comment" type="text" maxlength="300" placeholder="একটি মন্তব্য লিখুন..." style="flex:1; border:1px solid #e1e8e3; border-radius:12px; padding:8px 12px;" required>
+        <button class="btn light">পাঠান</button>
+      </form>
+    </article>
+  `}).join('');
+}
+
+async function loadPosts() {
+  postMessage('পোস্ট লোড হচ্ছে…');
+  const {data, error} = await supabaseClient
+    .from('posts')

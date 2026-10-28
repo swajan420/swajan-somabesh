@@ -299,6 +299,9 @@ function esc(s) {
   }[c]));
 }
 
+// লোকাল ইউজার ডেটা ব্যাকআপ লজিক (ইমেইল ভেরিফিকেশন বাইপাস করার জন্য)
+const SW_USER = 'swajan_local_user_v1';
+
 function authMessage(msg) {
   $('authStatus').textContent = msg;
 }
@@ -307,7 +310,6 @@ function postMessage(msg) {
   $('postStatus').textContent = msg;
 }
 
-// লোকাল লাইক-কমেন্ট ডেটাবেজ লজিক
 const LIKE_KEY = 'swajan_likes_store';
 const COMM_KEY = 'swajan_comments_store';
 let localLikes = JSON.parse(localStorage.getItem(LIKE_KEY)) || {};
@@ -376,5 +378,3 @@ function drawPosts(items, target = 'posts') {
 
 async function loadPosts() {
   postMessage('পোস্ট লোড হচ্ছে…');
-  const {data, error} = await supabaseClient
-    .from('posts')

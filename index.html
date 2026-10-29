@@ -3,7 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="theme-color" content="#145c46">
+<meta name="theme-color" content="#145c46"> 
+  <link rel="manifest" href="./manifest.json">
 <title>স্বজন সমাবেশ | Swajan Somabesh</title>
 <style>
 :root {
@@ -512,6 +513,10 @@ document.querySelectorAll('.nav button').forEach(btn=>{
     else if(event==='SIGNED_OUT') updateAuthUI(null);
   });
 })();
+  if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('./sw.js')
+    .catch(error => console.error('Service Worker:', error));
+  }
 </script>
 </body>
 </html>

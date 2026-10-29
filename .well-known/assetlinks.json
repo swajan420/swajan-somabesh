@@ -1,0 +1,8 @@
+[{
+  "relation": ["delegate_permission/common.handle_all_urls"],
+  "target": {
+    "namespace": "android_app",
+    "package_name": "com.swajansomabesh.app",
+    "sha256_cert_fingerprints": ["92:40:0D:45:59:C2:2D:05:37:70:56:62:D4:8E:41:CF:1D:C0:A7:AE:7F:BD:A2:5C:43:52:7C:34:4E:40:95:EC"]
+  }
+}]

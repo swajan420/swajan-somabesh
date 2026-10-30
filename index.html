@@ -267,256 +267,504 @@ input[type=password] {
 
 <!-- ✅ FIXED: সঠিক CDN -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+    
 <script>
 const SUPABASE_URL = 'https://bfbgzbpogeilcffrhqru.supabase.co';
 const SUPABASE_PUBLISHABLE_KEY = 'sb_publishable_XoCQ72fZftVkdXfUBqP8OA_j7n21Gv9';
 
-const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
+const supabaseClient = window.supabase.createClient(
+  SUPABASE_URL,
+  SUPABASE_PUBLISHABLE_KEY
+);
 
 let currentUser = null;
 let allPosts = [];
+let allLikes = {};
+let allComments = {};
+let openLikers = new Set();
+
 const $ = id => document.getElementById(id);
 
 function esc(s) {
   return String(s ?? '').replace(/[&<>"']/g, c => ({
-    '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
+    '&':'&amp;', '<':'&lt;', '>':'&gt;',
+    '"':'&quot;', "'":'&#39;'
   }[c]));
 }
-function authMessage(msg){ $('authStatus').textContent = msg; }
-function postMessage(msg){ $('postStatus').textContent = msg; }
 
-const LIKE_KEY = 'swajan_likes_store';
-const COMM_KEY = 'swajan_comments_store';
-let localLikes = JSON.parse(localStorage.getItem(LIKE_KEY)) || {};
-let localComments = JSON.parse(localStorage.getItem(COMM_KEY)) || {};
-function saveLocalData(){
-  localStorage.setItem(LIKE_KEY, JSON.stringify(localLikes));
-  localStorage.setItem(COMM_KEY, JSON.stringify(localComments));
+function authMessage(msg) {
+  $('authStatus').textContent = msg;
 }
 
-function showView(id){
+function postMessage(msg) {
+  $('postStatus').textContent = msg;
+}
+
+function memberName(user) {
+  return user?.user_metadata?.display_name ||
+    user?.email?.split('@')[0] || 'সদস্য';
+}
+
+function showView(id) {
   ['feedView','searchView','profileView'].forEach(v =>
     $(v).classList.toggle('hidden', v !== id)
   );
+
   document.querySelectorAll('[data-view]').forEach(b =>
     b.classList.toggle('active', b.dataset.view === id)
   );
-  if(id==='searchView') doSearch();
+
+  if (id === 'searchView') doSearch();
+  if (id === 'feedView') loadPosts();
 }
 
-function drawPosts(items, target='posts'){
+function drawPosts(items, target='posts') {
   const root = $(target);
-  if(!items.length){
-    root.innerHTML = '<div class="card empty">এখনো কোনো পোস্ট নেই। প্রথম পোস্টটি আপনিই করুন!</div>';
+
+  if (!items.length) {
+    root.innerHTML =
+      '<div class="card empty">এখনো কোনো পোস্ট নেই। প্রথম পোস্টটি আপনিই করুন!</div>';
     return;
   }
-  root.innerHTML = items.map(p=>{
-    const pLikes = localLikes[p.id] || {count:0, liked:false};
-    const pComments = localComments[p.id] || [];
+
+  root.innerHTML = items.map(p => {
+    const id = String(p.id);
+    const likes = allLikes[id] || [];
+    const comments = allComments[id] || [];
+    const liked = likes.some(x => x.user_id === currentUser?.id);
+    const showNames = openLikers.has(id);
+
     return `
-    <article class="card">
-      <div class="row">
-        <div class="avatar">${esc((p.author || 'স').slice(0,1))}</div>
-        <div class="grow">
-          <h2>${esc(p.author || 'স্বজন সমাবেশ সদস্য')}</h2>
-          <div class="muted">${esc(new Date(p.created_at).toLocaleString('bn-BD'))}</div>
+      <article class="card">
+        <div class="row">
+          <div class="avatar">${esc((p.author || 'স').slice(0,1))}</div>
+          <div class="grow">
+            <h2>${esc(p.author || 'স্বজন সমাবেশ সদস্য')}</h2>
+            <div class="muted">
+              ${esc(new Date(p.created_at).toLocaleString('bn-BD'))}
+            </div>
+          </div>
         </div>
-      </div>
-      <div class="postbody">${esc(p.content)}</div>
-      <div class="muted" style="margin-bottom:9px; font-size:13px;">
-        ❤️ <span id="like-count-${p.id}">${pLikes.count}</span>টি প্রতিক্রিয়া · 💬 ${pComments.length}টি মন্তব্য
-      </div>
-      <div class="actions">
-        <button class="action ${pLikes.liked ? 'on' : ''}" data-like="${p.id}">${pLikes.liked ? '❤️ পছন্দ করেছেন' : '♡ Like'}</button>
-        <button class="action" data-focus="${p.id}">💬 Comment</button>
-        <button class="action" data-share="${esc(p.id)}">↗ Share</button>
-      </div>
-      <div class="comments" id="comments-${p.id}">${pComments.map(c=>`<div class="comment">${esc(c)}</div>`).join('')}</div>
-      <form class="commentbox" data-comment="${p.id}">
-        <input name="comment" type="text" maxlength="300" placeholder="একটি মন্তব্য লিখুন..." required>
-        <button class="btn light">পাঠান</button>
-      </form>
-    </article>`;
+
+        <div class="postbody">${esc(p.content)}</div>
+
+        <div class="muted" style="margin-bottom:9px">
+          ❤️ ${likes.length}টি প্রতিক্রিয়া · 💬 ${comments.length}টি মন্তব্য
+        </div>
+
+        <div class="actions">
+          <button class="action ${liked ? 'on' : ''}" data-like="${id}">
+            ${liked ? '❤️ পছন্দ করেছেন' : '♡ Like'}
+          </button>
+          <button class="action" data-focus="${id}">💬 Comment</button>
+          <button class="action" data-likers="${id}">
+            👥 কারা লাইক করেছেন (${likes.length})
+          </button>
+          <button class="action" data-share="${id}">↗ Share</button>
+        </div>
+
+        <div class="comments ${showNames ? '' : 'hidden'}" id="likers-${id}">
+          <strong>লাইক দিয়েছেন:</strong>
+          ${
+            likes.length
+              ? likes.map(l => `<div class="comment">❤️ ${esc(l.user_name)}</div>`).join('')
+              : '<div class="comment">এখনো কেউ লাইক দেননি।</div>'
+          }
+        </div>
+
+        <div class="comments" id="comments-${id}">
+          ${
+            comments.map(c => `
+              <div class="comment">
+                <strong>${esc(c.user_name)}</strong>
+                <div>${esc(c.content)}</div>
+                <div class="muted">
+                  ${esc(new Date(c.created_at).toLocaleString('bn-BD'))}
+                </div>
+              </div>
+            `).join('')
+          }
+        </div>
+
+        <form class="commentbox" data-comment="${id}">
+          <input name="comment" type="text" maxlength="300"
+            placeholder="একটি মন্তব্য লিখুন..." required>
+          <button class="btn light">পাঠান</button>
+        </form>
+      </article>
+    `;
   }).join('');
 }
 
-async function loadPosts(){
+async function loadPosts() {
+  if (!currentUser) return;
+
   postMessage('পোস্ট লোড হচ্ছে…');
-  try{
-    const {data, error} = await supabaseClient.from('posts').select('*').order('created_at', {ascending:false}).limit(50);
-    if(error) throw error;
+
+  try {
+    const {data, error} = await supabaseClient
+      .from('posts')
+      .select('*')
+      .order('created_at', {ascending:false})
+      .limit(50);
+
+    if (error) throw error;
+
     allPosts = data || [];
+
+    if (allPosts.length) {
+      const ids = allPosts.map(p => p.id);
+
+      const [likeResult, commentResult] = await Promise.all([
+        supabaseClient.from('post_likes')
+          .select('post_id,user_id,user_name,created_at')
+          .in('post_id', ids),
+
+        supabaseClient.from('post_comments')
+          .select('post_id,user_id,user_name,content,created_at')
+          .in('post_id', ids)
+          .order('created_at', {ascending:true})
+      ]);
+
+      if (likeResult.error) throw likeResult.error;
+      if (commentResult.error) throw commentResult.error;
+
+      allLikes = {};
+      allComments = {};
+
+      (likeResult.data || []).forEach(l => {
+        const key = String(l.post_id);
+        if (!allLikes[key]) allLikes[key] = [];
+        allLikes[key].push(l);
+      });
+
+      (commentResult.data || []).forEach(c => {
+        const key = String(c.post_id);
+        if (!allComments[key]) allComments[key] = [];
+        allComments[key].push(c);
+      });
+    } else {
+      allLikes = {};
+      allComments = {};
+    }
+
     drawPosts(allPosts, 'posts');
-    if(allPosts.length) doSearch();
+    doSearch();
+
     postMessage(allPosts.length ? '' : 'এখনো কোনো পোস্ট নেই।');
-  }catch(e){
+
+  } catch (e) {
     console.error(e);
-    postMessage('পোস্ট লোড করতে সমস্যা: ' + (e.message || ''));
+    postMessage('ডাটা লোড সমস্যা: ' + e.message);
   }
 }
 
-function doSearch(){
+function doSearch() {
+  if (!currentUser) return;
+
   const q = ($('searchInput').value || '').trim().toLowerCase();
-  const filtered = !q ? allPosts : allPosts.filter(p => (p.content||'').toLowerCase().includes(q) || (p.author||'').toLowerCase().includes(q));
+
+  const filtered = !q ? allPosts : allPosts.filter(p =>
+    (p.content || '').toLowerCase().includes(q) ||
+    (p.author || '').toLowerCase().includes(q)
+  );
+
   drawPosts(filtered, 'searchResults');
 }
 
-function updateAuthUI(user){
+function updateAuthUI(user) {
   currentUser = user;
-  if(user){
+
+  if (user) {
     $('authCard').classList.add('hidden');
     $('feedView').classList.remove('hidden');
-    $('signedInAs').textContent = `লগইন করেছেন: ${user.email}`;
-    $('profileEmail').textContent = user.email + (user.user_metadata?.display_name ? ` · ${user.user_metadata.display_name}` : '');
+
+    $('signedInAs').textContent = 'লগইন করেছেন: ' + user.email;
+    $('profileEmail').textContent =
+      user.email + ' · ' + memberName(user);
+
     showView('feedView');
-    loadPosts();
-  }else{
+  } else {
     $('authCard').classList.remove('hidden');
-    ['feedView','searchView','profileView'].forEach(v=>$(v).classList.add('hidden'));
-    $('signedInAs').textContent = '';
+
+    ['feedView','searchView','profileView'].forEach(v =>
+      $(v).classList.add('hidden')
+    );
   }
 }
 
-// Events
-$('loginBtn').addEventListener('click', async ()=>{
+// Login
+$('loginBtn').addEventListener('click', async () => {
   const email = $('email').value.trim();
   const password = $('password').value;
-  if(!email || !password){ authMessage('ইমেইল ও পাসওয়ার্ড দিন।'); return; }
+
+  if (!email || !password) {
+    authMessage('ইমেইল ও পাসওয়ার্ড দিন।');
+    return;
+  }
+
   $('loginBtn').disabled = true;
   authMessage('লগইন হচ্ছে…');
-  const {data, error} = await supabaseClient.auth.signInWithPassword({email, password});
-  $('loginBtn').disabled = false;
-  if(error){ authMessage('লগইন ব্যর্থ: ' + error.message); }
-  else{ authMessage('সফল!'); updateAuthUI(data.user); }
-});
 
-$('signupBtn').addEventListener('click', async ()=>{
-  const displayName = $('displayName').value.trim();
-  const email = $('email').value.trim();
-  const password = $('password').value;
-  if(!email || password.length < 6){ authMessage('সঠিক ইমেইল ও ৬+ অক্ষরের পাসওয়ার্ড দিন।'); return; }
-  $('signupBtn').disabled = true;
-  authMessage('অ্যাকাউন্ট তৈরি হচ্ছে…');
-  const {data, error} = await supabaseClient.auth.signUp({
-    email, password,
-    options:{ data:{ display_name: displayName || email.split('@')[0] } }
-  });
-  $('signupBtn').disabled = false;
-  if(error){ authMessage('সাইনআপ ব্যর্থ: ' + error.message); }
-  else{
-    if(data.session){ authMessage('অ্যাকাউন্ট তৈরি ও লগইন সফল!'); updateAuthUI(data.user); }
-    else{ authMessage('অ্যাকাউন্ট তৈরি হয়েছে। ইমেইল চেক করুন (যদি কনফার্মেশন চালু থাকে), তারপর লগইন করুন।'); }
+  const {data, error} = await supabaseClient.auth
+    .signInWithPassword({email, password});
+
+  $('loginBtn').disabled = false;
+
+  if (error) authMessage('লগইন ব্যর্থ: ' + error.message);
+  else {
+    authMessage('সফল!');
+    updateAuthUI(data.user);
   }
 });
 
-$('logoutBtn').addEventListener('click', async ()=>{
+// Signup
+$('signupBtn').addEventListener('click', async () => {
+  const displayName = $('displayName').value.trim();
+  const email = $('email').value.trim();
+  const password = $('password').value;
+
+  if (!email || password.length < 6) {
+    authMessage('সঠিক ইমেইল ও ৬+ অক্ষরের পাসওয়ার্ড দিন।');
+    return;
+  }
+
+  $('signupBtn').disabled = true;
+  authMessage('অ্যাকাউন্ট তৈরি হচ্ছে…');
+
+  const {data, error} = await supabaseClient.auth.signUp({
+    email,
+    password,
+    options: {
+      data: {
+        display_name: displayName || email.split('@')[0]
+      }
+    }
+  });
+
+  $('signupBtn').disabled = false;
+
+  if (error) {
+    authMessage('সাইনআপ ব্যর্থ: ' + error.message);
+  } else if (data.session) {
+    authMessage('অ্যাকাউন্ট তৈরি ও লগইন সফল!');
+    updateAuthUI(data.user);
+  } else {
+    authMessage('অ্যাকাউন্ট তৈরি হয়েছে। ইমেইল কনফার্ম করে লগইন করুন।');
+  }
+});
+
+// Logout
+$('logoutBtn').addEventListener('click', async () => {
   await supabaseClient.auth.signOut();
-  localStorage.removeItem('swajan_session');
   updateAuthUI(null);
   authMessage('লগআউট হয়েছেন।');
 });
 
-$('publish').addEventListener('click', async ()=>{
+// Publish post
+$('publish').addEventListener('click', async () => {
   const content = $('postText').value.trim();
-  if(!content){ postMessage('কিছু লিখুন।'); return; }
-  if(!currentUser){ postMessage('পোস্ট করতে লগইন করুন।'); return; }
+
+  if (!content) {
+    postMessage('কিছু লিখুন।');
+    return;
+  }
+
+  if (!currentUser) {
+    postMessage('আগে লগইন করুন।');
+    return;
+  }
+
   $('publish').disabled = true;
   postMessage('পোস্ট করা হচ্ছে…');
-  try{
-    const {data, error} = await supabaseClient.from('posts').insert([{
+
+  try {
+    const {error} = await supabaseClient.from('posts').insert([{
       content,
-      author: currentUser.user_metadata?.display_name || currentUser.email?.split('@')[0] || 'সদস্য',
+      author: memberName(currentUser),
       user_id: currentUser.id
-    }]).select().single();
-    if(error) throw error;
+    }]);
+
+    if (error) throw error;
+
     $('postText').value = '';
     postMessage('পোস্ট হয়েছে!');
-    allPosts.unshift(data);
-    drawPosts(allPosts);
-  }catch(e){
-    postMessage('পোস্ট ব্যর্থ: ' + (e.message || ''));
-  }finally{
+    await loadPosts();
+
+  } catch (e) {
+    postMessage('পোস্ট ব্যর্থ: ' + e.message);
+  } finally {
     $('publish').disabled = false;
   }
 });
 
-$('searchInput').addEventListener('input', doSearch);
-
-document.addEventListener('click', e=>{
+// Like, show likers and share
+document.addEventListener('click', async e => {
   const likeBtn = e.target.closest('[data-like]');
-  if(likeBtn){
-    const id = likeBtn.getAttribute('data-like');
-    const cur = localLikes[id] || {count:0, liked:false};
-    if(cur.liked){ cur.count = Math.max(0, cur.count-1); cur.liked=false; }
-    else{ cur.count++; cur.liked=true; }
-    localLikes[id]=cur; saveLocalData();
-    const cnt = document.getElementById(`like-count-${id}`);
-    if(cnt) cnt.textContent = cur.count;
-    likeBtn.classList.toggle('on', cur.liked);
-    likeBtn.textContent = cur.liked ? '❤️ পছন্দ করেছেন' : '♡ Like';
+
+  if (likeBtn) {
+    const id = likeBtn.dataset.like;
+    const likes = allLikes[id] || [];
+    const existing = likes.find(l => l.user_id === currentUser.id);
+
+    likeBtn.disabled = true;
+
+    try {
+      if (existing) {
+        const {error} = await supabaseClient
+          .from('post_likes')
+          .delete()
+          .eq('post_id', id)
+          .eq('user_id', currentUser.id);
+
+        if (error) throw error;
+      } else {
+        const {error} = await supabaseClient
+          .from('post_likes')
+          .insert([{
+            post_id: Number(id),
+            user_id: currentUser.id,
+            user_name: memberName(currentUser)
+          }]);
+
+        if (error) throw error;
+      }
+
+      await loadPosts();
+
+    } catch (err) {
+      alert('লাইক পরিবর্তন করা যায়নি: ' + err.message);
+    } finally {
+      likeBtn.disabled = false;
+    }
   }
+
+  const likersBtn = e.target.closest('[data-likers]');
+  if (likersBtn) {
+    const id = likersBtn.dataset.likers;
+
+    if (openLikers.has(id)) openLikers.delete(id);
+    else openLikers.add(id);
+
+    drawPosts(allPosts, 'posts');
+    if ($('searchInput').value) doSearch();
+  }
+
   const focusBtn = e.target.closest('[data-focus]');
-  if(focusBtn){
-    const id = focusBtn.getAttribute('data-focus');
-    const input = document.querySelector(`form[data-comment="${id}"] input`);
-    if(input) input.focus();
+  if (focusBtn) {
+    const input = document.querySelector(
+      `form[data-comment="${focusBtn.dataset.focus}"] input`
+    );
+    if (input) input.focus();
   }
+
   const shareBtn = e.target.closest('[data-share]');
-  if(shareBtn){
-    const id = shareBtn.getAttribute('data-share');
-    const post = allPosts.find(p=>String(p.id)===String(id));
-    if(post){
-      const text = post.content;
-      if(navigator.share){ navigator.share({title:'স্বজন সমাবেশ', text}).catch(()=>{}); }
-      else if(navigator.clipboard){ navigator.clipboard.writeText(text).then(()=>alert('কপি হয়েছে!')).catch(()=>{}); }
-      else{ alert(text); }
+  if (shareBtn) {
+    const post = allPosts.find(
+      p => String(p.id) === String(shareBtn.dataset.share)
+    );
+
+    if (post) {
+      if (navigator.share) {
+        navigator.share({
+          title:'স্বজন সমাবেশ',
+          text:post.content
+        }).catch(() => {});
+      } else if (navigator.clipboard) {
+        navigator.clipboard.writeText(post.content)
+          .then(() => alert('কপি হয়েছে!'))
+          .catch(() => alert(post.content));
+      } else {
+        alert(post.content);
+      }
     }
   }
 });
 
-document.addEventListener('submit', e=>{
+// Submit comment
+document.addEventListener('submit', async e => {
   const form = e.target.closest('form[data-comment]');
-  if(!form) return;
+  if (!form) return;
+
   e.preventDefault();
-  const id = form.getAttribute('data-comment');
-  const input = form.querySelector('input[name="comment"]');
-  const txt = input.value.trim();
-  if(!txt) return;
-  const arr = localComments[id] || [];
-  arr.push(txt);
-  localComments[id]=arr; saveLocalData();
-  input.value='';
-  const box = document.getElementById(`comments-${id}`);
-  if(box){
-    const div = document.createElement('div');
-    div.className='comment'; div.textContent=txt; box.appendChild(div);
+
+  if (!currentUser) {
+    alert('কমেন্ট করতে লগইন করুন।');
+    return;
   }
-  const countEl = document.querySelector(`#posts .card:has(#comments-${id}) .muted, #searchResults .card:has(#comments-${id}) .muted`);
-  // simple reload
-  drawPosts(allPosts, 'posts');
-  if($('searchInput').value) doSearch();
+
+  const id = form.dataset.comment;
+  const input = form.querySelector('input[name="comment"]');
+  const content = input.value.trim();
+
+  if (!content) return;
+
+  const button = form.querySelector('button');
+  button.disabled = true;
+
+  try {
+    const {error} = await supabaseClient
+      .from('post_comments')
+      .insert([{
+        post_id: Number(id),
+        user_id: currentUser.id,
+        user_name: memberName(currentUser),
+        content
+      }]);
+
+    if (error) throw error;
+
+    input.value = '';
+    await loadPosts();
+
+  } catch (err) {
+    alert('কমেন্ট পাঠানো যায়নি: ' + err.message);
+  } finally {
+    button.disabled = false;
+  }
 });
 
-document.querySelectorAll('.nav button').forEach(btn=>{
-  btn.addEventListener('click', ()=>{
-    if(!currentUser){ authMessage('আগে লগইন করুন।'); return; }
+// Search and navigation
+$('searchInput').addEventListener('input', doSearch);
+
+document.querySelectorAll('.nav button').forEach(btn => {
+  btn.addEventListener('click', () => {
+    if (!currentUser) {
+      authMessage('আগে লগইন করুন।');
+      return;
+    }
     showView(btn.dataset.view);
   });
 });
 
-// init session
-(async ()=>{
+// Refresh posts when returning to the page
+document.addEventListener('visibilitychange', () => {
+  if (!document.hidden && currentUser) loadPosts();
+});
+
+// Restore login session
+(async () => {
   const {data} = await supabaseClient.auth.getSession();
-  if(data?.session?.user){ updateAuthUI(data.session.user); }
-  supabaseClient.auth.onAuthStateChange((event, session)=>{
-    if(session?.user) updateAuthUI(session.user);
-    else if(event==='SIGNED_OUT') updateAuthUI(null);
+
+  if (data?.session?.user) {
+    updateAuthUI(data.session.user);
+  }
+
+  supabaseClient.auth.onAuthStateChange((event, session) => {
+    if (event === 'SIGNED_OUT') updateAuthUI(null);
+    else if (session?.user && !currentUser) {
+      updateAuthUI(session.user);
+    }
   });
 })();
-  if ('serviceWorker' in navigator) {
+
+// Service worker
+if ('serviceWorker' in navigator) {
   navigator.serviceWorker.register('./sw.js')
     .catch(error => console.error('Service Worker:', error));
-  }
-</script>
+}
+    </script>
+  
+    
 </body>
 </html>

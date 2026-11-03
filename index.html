@@ -1,770 +1,146 @@
-<!doctype html>
-<html lang="bn">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="theme-color" content="#145c46"> 
-  <link rel="manifest" href="./manifest.json">
-<title>স্বজন সমাবেশ | Swajan Somabesh</title>
-<style>
-:root {
-  --green:#145c46;
-  --mint:#e4f2eb;
-  --bg:#f3f6f4;
-  --ink:#1c2923;
-  --muted:#68766f;
-  --line:#e1e8e3;
-}
-* { box-sizing:border-box; }
-body {
-  margin:0;
-  background:var(--bg);
-  color:var(--ink);
-  font:16px system-ui,-apple-system,"Noto Sans Bengali",sans-serif;
-}
-header {
-  background:var(--green);
-  color:white;
-  padding:18px 16px;
-  position:sticky;
-  top:0;
-  z-index:2;
-  box-shadow:0 2px 8px #0001;
-}
-.head {
-  max-width:760px;
-  margin:auto;
-  display:flex;
-  align-items:center;
-  gap:12px;
-}
-.logo {
-  width:44px;
-  height:44px;
-  border-radius:14px;
-  background:#ffffff24;
-  display:grid;
-  place-items:center;
-  font-size:25px;
-}
-.brand { font-weight:800; font-size:20px; }
-.tag { font-size:12px; color:#d4f0e4; }
-.wrap {
-  max-width:760px;
-  margin:16px auto;
-  padding:0 12px 90px;
-}
-.card {
-  background:white;
-  border:1px solid var(--line);
-  border-radius:17px;
-  padding:15px;
-  margin-bottom:13px;
-  box-shadow:0 2px 8px #183a2910}
-.row { display:flex; align-items:center; gap:10px; }
-.grow { flex:1; }
-.avatar {
-  width:40px;
-  height:40px;
-  border-radius:50%;
-  background:var(--mint);
-  color:var(--green);
-  display:grid;
-  place-items:center;
-  font-weight:800;
-  flex-shrink:0;
-}
-h1,h2,p { margin:0; }
-h2 { font-size:17px; }
-.muted { color:var(--muted); font-size:13px; }
-textarea {
-  width:100%;
-  border:1px solid var(--line);
-  border-radius:12px;
-  outline:0;
-  resize:vertical;
-  min-height:82px;
-  font:inherit;
-  padding:12px;
-}
-input,button { font:inherit; }
-input[type=text],
-input[type=email],
-input[type=password] {
-  width:100%;
-  border:1px solid var(--line);
-  border-radius:12px;
-  padding:11px;
-  background:#fff;
-  margin:5px 0;
-}
-.btn {
-  border:0;
-  border-radius:12px;
-  padding:10px 14px;
-  background:var(--green);
-  color:white;
-  font-weight:700;
-  cursor:pointer;
-}
-.btn:disabled { opacity:0.6; cursor:not-allowed; }
-.btn.light { background:var(--mint); color:var(--green); }
-.tools {
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  border-top:1px solid var(--line);
-  padding-top:10px;
-  margin-top:10px;
-  gap:8px;
-  flex-wrap:wrap;
-}
-.postbody {
-  white-space:pre-wrap;
-  line-height:1.55;
-  margin:13px 0;
-}
-.actions {
-  display:flex;
-  gap:8px;
-  border-top:1px solid var(--line);
-  padding-top:10px;
-  flex-wrap:wrap;
-}
-.action {
-  border:0;
-  background:#f5f8f6;
-  padding:8px 12px;
-  border-radius:10px;
-  color:#33443b;
-  cursor:pointer;
-}
-.action.on { background:var(--mint); color:var(--green); font-weight:700; }
-.commentbox { display:flex; gap:8px; margin-top:10px; }
-.commentbox input { flex:1; min-width:0; }
-.comments { margin-top:10px; font-size:14px; }
-.comment { background:#f6f8f7; border-radius:10px; padding:8px 10px; margin-top:6px; }
-.notice { font-size:12px; color:var(--muted); line-height:1.5; }
-.empty { text-align:center; padding:25px; color:var(--muted); }
-.hidden { display:none!important; }
-.nav {
-  position:fixed;
-  bottom:0;
-  left:0;
-  right:0;
-  background:#fff;
-  border-top:1px solid var(--line);
-  display:flex;
-  justify-content:center;
-  gap:8px;
-  padding:9px 8px calc(9px + env(safe-area-inset-bottom));
-  z-index:3;
-}
-.nav button {
-  background:white;
-  border:0;
-  color:var(--muted);
-  padding:8px 12px;
-  border-radius:12px;
-  cursor:pointer;
-}
-.nav button.active {
-  background:var(--mint);
-  color:var(--green);
-  font-weight:800;
-}
-.status { font-size:13px; margin-top:8px; color:var(--muted); }
-@media(min-width:600px) {
-  .wrap { margin-top:22px; }
-  .card { padding:18px; }
-}
-</style>
-</head>
-<body>
 
-<header>
-  <div class="head">
-    <div class="logo">🤝</div>
-    <div class="grow">
-      <div class="brand">স্বজন সমাবেশ</div>
-      <div class="tag">Swajan Somabesh · মানুষের সঙ্গে মানুষের সংযোগ</div>
-    </div>
-  </div>
-</header>
-
-<main class="wrap">
-
-<section id="authCard" class="card">
-  <h2 id="authTitle">সদস্য লগইন / নতুন অ্যাকাউন্ট</h2>
-  <p class="muted" style="margin:6px 0 10px">
-    পোস্ট দেখতে ও লিখতে আগে লগইন করুন।
-  </p>
-  <div id="signupFields">
-    <input id="displayName" type="text" maxlength="60" placeholder="আপনার নাম (নতুন অ্যাকাউন্টের জন্য)">
-  </div>
-  <input id="email" type="email" autocomplete="email" placeholder="ইমেইল ঠিকানা">
-  <input id="password" type="password" autocomplete="current-password" minlength="6" placeholder="পাসওয়ার্ড (কমপক্ষে ৬ অক্ষর)">
-  <div class="tools">
-    <button class="btn" id="loginBtn">লগইন</button>
-    <button class="btn light" id="signupBtn">নতুন অ্যাকাউন্ট খুলুন</button>
-  </div>
-  <div id="authStatus" class="status" role="status"></div>
-</section>
-
-<section id="feedView" class="hidden">
-  <div class="card">
-    <div class="row">
-      <div class="avatar">স</div>
-      <div class="grow">
-        <h2>আপনার নিউজ ফিড</h2>
-        <div class="muted">সদস্যদের সবার পোস্ট এখানে দেখা যাবে</div>
-      </div>
-      <button class="btn light" id="logoutBtn">লগআউট</button>
-    </div>
-    <div id="signedInAs" class="status"></div>
-  </div>
-
-  <div class="card">
-    <textarea id="postText" maxlength="5000" placeholder="আপনার মনে কী আছে? লিখুন..."></textarea>
-    <div class="tools">
-      <span class="muted">🌿 সম্মানজনক ও উপকারী পোস্ট করুন</span>
-      <button class="btn" id="publish">পোস্ট করুন</button>
-    </div>
-    <div id="postStatus" class="status"></div>
-  </div>
-
-  <div id="posts"></div>
-</section>
-
-<section id="searchView" class="hidden">
-  <div class="card">
-    <h2 style="margin-bottom:10px">পোস্ট খুঁজুন</h2>
-    <input id="searchInput" type="text" placeholder="পোস্টের লেখা দিয়ে খুঁজুন...">
-  </div>
-  <div id="searchResults"></div>
-</section>
-
-<section id="profileView" class="hidden">
-  <div class="card">
-    <div class="row">
-      <div class="avatar" style="width:58px;height:58px;font-size:23px">স</div>
-      <div>
-        <h2>আপনার প্রোফাইল</h2>
-        <div class="muted" id="profileEmail">লগইন করলে এখানে তথ্য দেখাবে</div>
-      </div>
-    </div>
-    <p class="postbody">স্বজন সমাবেশ—মানুষের সঙ্গে মানুষের সংযোগ।</p>
-  </div>
-</section>
-
-</main>
-
-<nav class="nav">
-  <button class="active" data-view="feedView">🏠 হোম</button>
-  <button data-view="searchView">🔎 খুঁজুন</button>
-  <button data-view="profileView">👤 প্রোফাইল</button>
-</nav>
-
-<!-- ✅ FIXED: সঠিক CDN -->
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
-    
-<script>
-const SUPABASE_URL = 'https://bfbgzbpogeilcffrhqru.supabase.co';
-const SUPABASE_PUBLISHABLE_KEY = 'sb_publishable_XoCQ72fZftVkdXfUBqP8OA_j7n21Gv9';
-
-const supabaseClient = window.supabase.createClient(
-  SUPABASE_URL,
-  SUPABASE_PUBLISHABLE_KEY
-);
-
-let currentUser = null;
-let allPosts = [];
-let allLikes = {};
-let allComments = {};
-let openLikers = new Set();
-
-const $ = id => document.getElementById(id);
-
-function esc(s) {
-  return String(s ?? '').replace(/[&<>"']/g, c => ({
-    '&':'&amp;', '<':'&lt;', '>':'&gt;',
-    '"':'&quot;', "'":'&#39;'
-  }[c]));
-}
-
-function authMessage(msg) {
-  $('authStatus').textContent = msg;
-}
-
-function postMessage(msg) {
-  $('postStatus').textContent = msg;
-}
-
-function memberName(user) {
-  return user?.user_metadata?.display_name ||
-    user?.email?.split('@')[0] || 'সদস্য';
-}
-
-function showView(id) {
-  ['feedView','searchView','profileView'].forEach(v =>
-    $(v).classList.toggle('hidden', v !== id)
-  );
-
-  document.querySelectorAll('[data-view]').forEach(b =>
-    b.classList.toggle('active', b.dataset.view === id)
-  );
-
-  if (id === 'searchView') doSearch();
-  if (id === 'feedView') loadPosts();
-}
-
-function drawPosts(items, target='posts') {
-  const root = $(target);
-
-  if (!items.length) {
-    root.innerHTML =
-      '<div class="card empty">এখনো কোনো পোস্ট নেই। প্রথম পোস্টটি আপনিই করুন!</div>';
-    return;
-  }
-
-  root.innerHTML = items.map(p => {
-    const id = String(p.id);
-    const likes = allLikes[id] || [];
-    const comments = allComments[id] || [];
-    const liked = likes.some(x => x.user_id === currentUser?.id);
-    const showNames = openLikers.has(id);
-
-    return `
-      <article class="card">
-        <div class="row">
-          <div class="avatar">${esc((p.author || 'স').slice(0,1))}</div>
-          <div class="grow">
-            <h2>${esc(p.author || 'স্বজন সমাবেশ সদস্য')}</h2>
-            <div class="muted">
-              ${esc(new Date(p.created_at).toLocaleString('bn-BD'))}
-            </div>
-          </div>
-        </div>
-
-        <div class="postbody">${esc(p.content)}</div>
-
-        <div class="muted" style="margin-bottom:9px">
-          ❤️ ${likes.length}টি প্রতিক্রিয়া · 💬 ${comments.length}টি মন্তব্য
-        </div>
-
-        <div class="actions">
-          <button class="action ${liked ? 'on' : ''}" data-like="${id}">
-            ${liked ? '❤️ পছন্দ করেছেন' : '♡ Like'}
-          </button>
-          <button class="action" data-focus="${id}">💬 Comment</button>
-          <button class="action" data-likers="${id}">
-            👥 কারা লাইক করেছেন (${likes.length})
-          </button>
-          <button class="action" data-share="${id}">↗ Share</button>
-        </div>
-
-        <div class="comments ${showNames ? '' : 'hidden'}" id="likers-${id}">
-          <strong>লাইক দিয়েছেন:</strong>
-          ${
-            likes.length
-              ? likes.map(l => `<div class="comment">❤️ ${esc(l.user_name)}</div>`).join('')
-              : '<div class="comment">এখনো কেউ লাইক দেননি।</div>'
-          }
-        </div>
-
-        <div class="comments" id="comments-${id}">
-          ${
-            comments.map(c => `
-              <div class="comment">
-                <strong>${esc(c.user_name)}</strong>
-                <div>${esc(c.content)}</div>
-                <div class="muted">
-                  ${esc(new Date(c.created_at).toLocaleString('bn-BD'))}
-                </div>
-              </div>
-            `).join('')
-          }
-        </div>
-
-        <form class="commentbox" data-comment="${id}">
-          <input name="comment" type="text" maxlength="300"
-            placeholder="একটি মন্তব্য লিখুন..." required>
-          <button class="btn light">পাঠান</button>
-        </form>
-      </article>
-    `;
-  }).join('');
-}
-
-async function loadPosts() {
-  if (!currentUser) return;
-
-  postMessage('পোস্ট লোড হচ্ছে…');
-
-  try {
-    const {data, error} = await supabaseClient
-      .from('posts')
-      .select('*')
-      .order('created_at', {ascending:false})
-      .limit(50);
-
-    if (error) throw error;
-
-    allPosts = data || [];
-
-    if (allPosts.length) {
-      const ids = allPosts.map(p => p.id);
-
-      const [likeResult, commentResult] = await Promise.all([
-        supabaseClient.from('post_likes')
-          .select('post_id,user_id,user_name,created_at')
-          .in('post_id', ids),
-
-        supabaseClient.from('post_comments')
-          .select('post_id,user_id,user_name,content,created_at')
-          .in('post_id', ids)
-          .order('created_at', {ascending:true})
-      ]);
-
-      if (likeResult.error) throw likeResult.error;
-      if (commentResult.error) throw commentResult.error;
-
-      allLikes = {};
-      allComments = {};
-
-      (likeResult.data || []).forEach(l => {
-        const key = String(l.post_id);
-        if (!allLikes[key]) allLikes[key] = [];
-        allLikes[key].push(l);
-      });
-
-      (commentResult.data || []).forEach(c => {
-        const key = String(c.post_id);
-        if (!allComments[key]) allComments[key] = [];
-        allComments[key].push(c);
-      });
-    } else {
-      allLikes = {};
-      allComments = {};
-    }
-
-    drawPosts(allPosts, 'posts');
-    doSearch();
-
-    postMessage(allPosts.length ? '' : 'এখনো কোনো পোস্ট নেই।');
-
-  } catch (e) {
-    console.error(e);
-    postMessage('ডাটা লোড সমস্যা: ' + e.message);
-  }
-}
-
-function doSearch() {
-  if (!currentUser) return;
-
-  const q = ($('searchInput').value || '').trim().toLowerCase();
-
-  const filtered = !q ? allPosts : allPosts.filter(p =>
-    (p.content || '').toLowerCase().includes(q) ||
-    (p.author || '').toLowerCase().includes(q)
-  );
-
-  drawPosts(filtered, 'searchResults');
-}
-
-function updateAuthUI(user) {
-  currentUser = user;
-
-  if (user) {
-    $('authCard').classList.add('hidden');
-    $('feedView').classList.remove('hidden');
-
-    $('signedInAs').textContent = 'লগইন করেছেন: ' + user.email;
-    $('profileEmail').textContent =
-      user.email + ' · ' + memberName(user);
-
-    showView('feedView');
-  } else {
-    $('authCard').classList.remove('hidden');
-
-    ['feedView','searchView','profileView'].forEach(v =>
-      $(v).classList.add('hidden')
-    );
-  }
-}
-
-// Login
-$('loginBtn').addEventListener('click', async () => {
-  const email = $('email').value.trim();
-  const password = $('password').value;
-
-  if (!email || !password) {
-    authMessage('ইমেইল ও পাসওয়ার্ড দিন।');
-    return;
-  }
-
-  $('loginBtn').disabled = true;
-  authMessage('লগইন হচ্ছে…');
-
-  const {data, error} = await supabaseClient.auth
-    .signInWithPassword({email, password});
-
-  $('loginBtn').disabled = false;
-
-  if (error) authMessage('লগইন ব্যর্থ: ' + error.message);
-  else {
-    authMessage('সফল!');
-    updateAuthUI(data.user);
-  }
-});
-
-// Signup
-$('signupBtn').addEventListener('click', async () => {
-  const displayName = $('displayName').value.trim();
-  const email = $('email').value.trim();
-  const password = $('password').value;
-
-  if (!email || password.length < 6) {
-    authMessage('সঠিক ইমেইল ও ৬+ অক্ষরের পাসওয়ার্ড দিন।');
-    return;
-  }
-
-  $('signupBtn').disabled = true;
-  authMessage('অ্যাকাউন্ট তৈরি হচ্ছে…');
-
-  const {data, error} = await supabaseClient.auth.signUp({
-    email,
-    password,
-    options: {
-      data: {
-        display_name: displayName || email.split('@')[0]
-      }
-    }
-  });
-
-  $('signupBtn').disabled = false;
-
-  if (error) {
-    authMessage('সাইনআপ ব্যর্থ: ' + error.message);
-  } else if (data.session) {
-    authMessage('অ্যাকাউন্ট তৈরি ও লগইন সফল!');
-    updateAuthUI(data.user);
-  } else {
-    authMessage('অ্যাকাউন্ট তৈরি হয়েছে। ইমেইল কনফার্ম করে লগইন করুন।');
-  }
-});
-
-// Logout
-$('logoutBtn').addEventListener('click', async () => {
-  await supabaseClient.auth.signOut();
-  updateAuthUI(null);
-  authMessage('লগআউট হয়েছেন।');
-});
-
-// Publish post
-$('publish').addEventListener('click', async () => {
-  const content = $('postText').value.trim();
-
-  if (!content) {
-    postMessage('কিছু লিখুন।');
-    return;
-  }
-
-  if (!currentUser) {
-    postMessage('আগে লগইন করুন।');
-    return;
-  }
-
-  $('publish').disabled = true;
-  postMessage('পোস্ট করা হচ্ছে…');
-
-  try {
-    const {error} = await supabaseClient.from('posts').insert([{
-      content,
-      author: memberName(currentUser),
-      user_id: currentUser.id
-    }]);
-
-    if (error) throw error;
-
-    $('postText').value = '';
-    postMessage('পোস্ট হয়েছে!');
-    await loadPosts();
-
-  } catch (e) {
-    postMessage('পোস্ট ব্যর্থ: ' + e.message);
-  } finally {
-    $('publish').disabled = false;
-  }
-});
-
-// Like, show likers and share
-document.addEventListener('click', async e => {
-  const likeBtn = e.target.closest('[data-like]');
-
-  if (likeBtn) {
-    const id = likeBtn.dataset.like;
-    const likes = allLikes[id] || [];
-    const existing = likes.find(l => l.user_id === currentUser.id);
-
-    likeBtn.disabled = true;
-
-    try {
-      if (existing) {
-        const {error} = await supabaseClient
-          .from('post_likes')
-          .delete()
-          .eq('post_id', id)
-          .eq('user_id', currentUser.id);
-
-        if (error) throw error;
-      } else {
-        const {error} = await supabaseClient
-          .from('post_likes')
-          .insert([{
-            post_id: Number(id),
-            user_id: currentUser.id,
-            user_name: memberName(currentUser)
-          }]);
-
-        if (error) throw error;
-      }
-
-      await loadPosts();
-
-    } catch (err) {
-      alert('লাইক পরিবর্তন করা যায়নি: ' + err.message);
-    } finally {
-      likeBtn.disabled = false;
-    }
-  }
-
-  const likersBtn = e.target.closest('[data-likers]');
-  if (likersBtn) {
-    const id = likersBtn.dataset.likers;
-
-    if (openLikers.has(id)) openLikers.delete(id);
-    else openLikers.add(id);
-
-    drawPosts(allPosts, 'posts');
-    if ($('searchInput').value) doSearch();
-  }
-
-  const focusBtn = e.target.closest('[data-focus]');
-  if (focusBtn) {
-    const input = document.querySelector(
-      `form[data-comment="${focusBtn.dataset.focus}"] input`
-    );
-    if (input) input.focus();
-  }
-
-  const shareBtn = e.target.closest('[data-share]');
-  if (shareBtn) {
-    const post = allPosts.find(
-      p => String(p.id) === String(shareBtn.dataset.share)
-    );
-
-    if (post) {
-      if (navigator.share) {
-        navigator.share({
-          title:'স্বজন সমাবেশ',
-          text:post.content
-        }).catch(() => {});
-      } else if (navigator.clipboard) {
-        navigator.clipboard.writeText(post.content)
-          .then(() => alert('কপি হয়েছে!'))
-          .catch(() => alert(post.content));
-      } else {
-        alert(post.content);
-      }
-    }
-  }
-});
-
-// Submit comment
-document.addEventListener('submit', async e => {
-  const form = e.target.closest('form[data-comment]');
-  if (!form) return;
-
-  e.preventDefault();
-
-  if (!currentUser) {
-    alert('কমেন্ট করতে লগইন করুন।');
-    return;
-  }
-
-  const id = form.dataset.comment;
-  const input = form.querySelector('input[name="comment"]');
-  const content = input.value.trim();
-
-  if (!content) return;
-
-  const button = form.querySelector('button');
-  button.disabled = true;
-
-  try {
-    const {error} = await supabaseClient
-      .from('post_comments')
-      .insert([{
-        post_id: Number(id),
-        user_id: currentUser.id,
-        user_name: memberName(currentUser),
-        content
-      }]);
-
-    if (error) throw error;
-
-    input.value = '';
-    await loadPosts();
-
-  } catch (err) {
-    alert('কমেন্ট পাঠানো যায়নি: ' + err.message);
-  } finally {
-    button.disabled = false;
-  }
-});
-
-// Search and navigation
-$('searchInput').addEventListener('input', doSearch);
-
-document.querySelectorAll('.nav button').forEach(btn => {
-  btn.addEventListener('click', () => {
-    if (!currentUser) {
-      authMessage('আগে লগইন করুন।');
-      return;
-    }
-    showView(btn.dataset.view);
-  });
-});
-
-// Refresh posts when returning to the page
-document.addEventListener('visibilitychange', () => {
-  if (!document.hidden && currentUser) loadPosts();
-});
-
-// Restore login session
-(async () => {
-  const {data} = await supabaseClient.auth.getSession();
-
-  if (data?.session?.user) {
-    updateAuthUI(data.session.user);
-  }
-
-  supabaseClient.auth.onAuthStateChange((event, session) => {
-    if (event === 'SIGNED_OUT') updateAuthUI(null);
-    else if (session?.user && !currentUser) {
-      updateAuthUI(session.user);
-    }
-  });
-})();
-
-// Service worker
-if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('./sw.js')
-    .catch(error => console.error('Service Worker:', error));
-}
-    </script>
-  
-    
-</body>
-</html>
+1	<!doctype html> 
+2	<html lang="bn"> 
+3	<head> 
+4	<meta charset="utf-8"> 
+5	<meta name="viewport" content="width=device-width,initial-scale=1"> 
+6	<meta name="theme-color" content="#145c46"> 
+7	<link rel="manifest" href="./manifest.json"> 
+8	<title>স্বজন সমাবেশ | Swajan Somabesh</title> 
+9	<style> 
+10	:root{--green:#145c46;--mint:#e4f2eb;--bg:#f3f6f4;--ink:#1c2923;--muted:#68766f;--line:#e1e8e3} 
+11	*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:16px system-ui,-apple-system,"Noto Sans Bengali",sans-serif} 
+12	header{background:var(--green);color:white;padding:18px 16px;position:sticky;top:0;z-index:2;box-shadow:0 2px 8px #0001} 
+13	.head{max-width:760px;margin:auto;display:flex;align-items:center;gap:12px}.logo{width:44px;height:44px;border-radius:14px;background:#ffffff24;display:grid;place-items:center;font-size:25px}.brand{font-weight:800;font-size:20px}.tag{font-size:12px;color:#d4f0e4} 
+14	.wrap{max-width:760px;margin:16px auto;padding:0 12px 100px}.card{background:white;border:1px solid var(--line);border-radius:17px;padding:15px;margin-bottom:13px;box-shadow:0 2px 8px #183a2910} 
+15	.row{display:flex;align-items:center;gap:10px}.grow{flex:1;min-width:0}.avatar{width:40px;height:40px;border-radius:50%;background:var(--mint);color:var(--green);display:grid;place-items:center;font-weight:800;flex-shrink:0} 
+16	h1,h2,p{margin:0}h2{font-size:17px}.muted{color:var(--muted);font-size:13px} 
+17	textarea{width:100%;border:1px solid var(--line);border-radius:12px;outline:0;resize:vertical;min-height:82px;font:inherit;padding:12px} 
+18	input,button{font:inherit}input[type=text],input[type=email],input[type=password]{width:100%;border:1px solid var(--line);border-radius:12px;padding:11px;background:#fff;margin:5px 0} 
+19	.btn{border:0;border-radius:12px;padding:10px 14px;background:var(--green);color:white;font-weight:700;cursor:pointer}.btn:disabled{opacity:.6;cursor:not-allowed}.btn.light{background:var(--mint);color:var(--green)}.btn.danger{background:#fae9e7;color:#9b2c25} 
+20	.tools{display:flex;justify-content:space-between;align-items:center;border-top:1px solid var(--line);padding-top:10px;margin-top:10px;gap:8px;flex-wrap:wrap} 
+21	.postbody{white-space:pre-wrap;line-height:1.55;margin:13px 0}.actions{display:flex;gap:8px;border-top:1px solid var(--line);padding-top:10px;flex-wrap:wrap} 
+22	.action{border:0;background:#f5f8f6;padding:8px 12px;border-radius:10px;color:#33443b;cursor:pointer}.action.on{background:var(--mint);color:var(--green);font-weight:700} 
+23	.commentbox{display:flex;gap:8px;margin-top:10px}.commentbox input{flex:1;min-width:0}.comments{margin-top:10px;font-size:14px}.comment{background:#f6f8f7;border-radius:10px;padding:8px 10px;margin-top:6px} 
+24	.notice{font-size:12px;color:var(--muted);line-height:1.5}.empty{text-align:center;padding:25px;color:var(--muted)}.hidden{display:none!important}.status{font-size:13px;margin-top:8px;color:var(--muted)} 
+25	.nav{position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:1px solid var(--line);display:flex;justify-content:center;gap:4px;padding:9px 4px calc(9px + env(safe-area-inset-bottom));z-index:3} 
+26	.nav button{background:white;border:0;color:var(--muted);padding:8px 9px;border-radius:12px;cursor:pointer;font-size:14px}.nav button.active{background:var(--mint);color:var(--green);font-weight:800} 
+27	.member{display:flex;align-items:center;gap:10px;padding:11px 0;border-bottom:1px solid var(--line)}.member:last-child{border-bottom:0} 
+28	@media(min-width:600px){.wrap{margin-top:22px}.card{padding:18px}} 
+29	</style> 
+30	</head> 
+31	<body> 
+32	<header><div class="head"><div class="logo">🤝</div><div class="grow"><div class="brand">স্বজন সমাবেশ</div><div class="tag">Swajan Somabesh · মানুষের সঙ্গে মানুষের সংযোগ</div></div></div></header> 
+33	<main class="wrap"> 
+34	<section id="authCard" class="card"> 
+35	<h2>সদস্য লগইন / নতুন অ্যাকাউন্ট</h2><p class="muted" style="margin:6px 0 10px">পোস্ট দেখতে ও লিখতে আগে লগইন করুন।</p> 
+36	<div id="signupFields"><input id="displayName" type="text" maxlength="60" placeholder="আপনার পূর্ণ নাম (নতুন অ্যাকাউন্টের জন্য)"></div> 
+37	<input id="email" type="email" autocomplete="email" placeholder="ইমেইল ঠিকানা"><input id="password" type="password" autocomplete="current-password" minlength="6" placeholder="পাসওয়ার্ড (কমপক্ষে ৬ অক্ষর)"> 
+38	<div class="tools"><button class="btn" id="loginBtn">লগইন</button><button class="btn light" id="signupBtn">নতুন অ্যাকাউন্ট খুলুন</button></div><div id="authStatus" class="status" role="status"></div> 
+39	</section> 
+40	<section id="feedView" class="hidden"> 
+41	<div class="card"><div class="row"><div class="avatar">স</div><div class="grow"><h2>আপনার নিউজ ফিড</h2><div class="muted">সদস্যদের সবার পোস্ট এখানে দেখা যাবে</div></div><button class="btn light" id="logoutBtn">লগআউট</button></div><div id="signedInAs" class="status"></div></div> 
+42	<div class="card"><textarea id="postText" maxlength="5000" placeholder="আপনার মনে কী আছে? লিখুন..."></textarea><div class="tools"><span class="muted">🌿 সম্মানজনক ও উপকারী পোস্ট করুন</span><button class="btn" id="publish">পোস্ট করুন</button></div><div id="postStatus" class="status"></div></div><div id="posts"></div> 
+43	</section> 
+44	<section id="searchView" class="hidden"><div class="card"><h2 style="margin-bottom:10px">পোস্ট খুঁজুন</h2><input id="searchInput" type="text" placeholder="পোস্টের লেখা দিয়ে খুঁজুন..."></div><div id="searchResults"></div></section> 
+45	<section id="membersView" class="hidden"> 
+46	<div class="card"><h2>🔎 সদস্য খুঁজুন</h2><p class="muted" style="margin:5px 0 10px">সদস্যের পূর্ণ নাম লিখে খুঁজুন।</p><input id="memberSearchInput" type="text" maxlength="60" placeholder="সদস্যের নাম লিখুন..."><div id="memberSearchStatus" class="status"></div><div id="memberResults"></div></div> 
+47	<div class="card"><h2>📩 আসা Friend Request</h2><div id="incomingRequests"><div class="empty">লোড হচ্ছে…</div></div></div> 
+48	<div class="card"><h2>📤 পাঠানো Friend Request</h2><div id="outgoingRequests"><div class="empty">লোড হচ্ছে…</div></div></div> 
+49	<div class="card"><h2>🤝 আমার Friends List</h2><div id="friendsList"><div class="empty">লোড হচ্ছে…</div></div></div> 
+50	</section> 
+51	<section id="profileView" class="hidden"> 
+52	<div class="card"><div class="row"><div class="avatar" style="width:58px;height:58px;font-size:23px" id="profileAvatar">স</div><div class="grow"><h2>আপনার প্রোফাইল</h2><div class="muted" id="profileEmail">লগইন করলে এখানে তথ্য দেখাবে</div></div></div> 
+53	<label class="muted" for="profileName">আপনার পূর্ণ নাম</label><input id="profileName" type="text" maxlength="60" placeholder="আপনার নাম"><label class="muted" for="profileBio">পরিচিতি (Bio)</label><textarea id="profileBio" maxlength="300" placeholder="নিজের সম্পর্কে সংক্ষেপে লিখুন..."></textarea><div class="tools"><span class="notice">আপনার নাম ও Bio অন্য সদস্যরা দেখতে পারবেন। ইমেইল ব্যক্তিগত থাকবে।</span><button class="btn" id="saveProfileBtn">প্রোফাইল সংরক্ষণ</button></div><div id="profileStatus" class="status"></div></div> 
+54	</section> 
+55	</main> 
+56	<nav class="nav"> 
+57	<button class="active" data-view="feedView">🏠 হোম</button><button data-view="searchView">🔎 পোস্ট</button><button data-view="membersView">👥 সদস্য</button><button data-view="profileView">👤 প্রোফাইল</button> 
+58	</nav> 
+59	<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script> 
+60	<script> 
+61	const SUPABASE_URL='https://bfbgzbpogeilcffrhqru.supabase.co'; 
+62	const SUPABASE_PUBLISHABLE_KEY='sb_publishable_XoCQ72fZftVkdXfUBqP8OA_j7n21Gv9'; 
+63	const supabaseClient=window.supabase.createClient(SUPABASE_URL,SUPABASE_PUBLISHABLE_KEY); 
+64	let currentUser=null,allPosts=[],allLikes={},allComments={},openLikers=new Set(),myProfile=null; 
+65	const $=id=>document.getElementById(id); 
+66	function esc(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));} 
+67	function authMessage(s){$('authStatus').textContent=s}function postMessage(s){$('postStatus').textContent=s} 
+68	function memberName(user){return myProfile?.full_name||user?.user_metadata?.display_name||'সদস্য';} 
+69	function showView(id){['feedView','searchView','membersView','profileView'].forEach(v=>$(v).classList.toggle('hidden',v!==id));document.querySelectorAll('[data-view]').forEach(b=>b.classList.toggle('active',b.dataset.view===id));if(id==='searchView')doSearch();if(id==='feedView')loadPosts();if(id==='membersView')loadSocialData();if(id==='profileView')loadProfile();} 
+70	async function ensureProfile(user){ 
+71	 const {data,error}=await supabaseClient.from('profiles').select('id,full_name,avatar_url,bio').eq('id',user.id).maybeSingle(); 
+72	 if(error)throw error; 
+73	 if(data){myProfile=data;return data;} 
+74	 const name=(user.user_metadata?.display_name||user.email?.split('@')[0]||'সদস্য').trim(); 
+75	 const result=await supabaseClient.from('profiles').insert({id:user.id,full_name:name}).select().single(); 
+76	 if(result.error)throw result.error;myProfile=result.data;return myProfile; 
+77	} 
+78	async function loadProfile(){ 
+79	 if(!currentUser)return; 
+80	 try{if(!myProfile)await ensureProfile(currentUser);$('profileName').value=myProfile.full_name||'';$('profileBio').value=myProfile.bio||'';$('profileEmail').textContent='ইমেইল ব্যক্তিগত · '+currentUser.email;$('profileAvatar').textContent=(myProfile.full_name||'স').slice(0,1);} 
+81	 catch(e){$('profileStatus').textContent='প্রোফাইল লোড হয়নি: '+e.message;} 
+82	} 
+83	function drawPosts(items,target='posts'){ 
+84	 const root=$(target);if(!items.length){root.innerHTML='<div class="card empty">এখনো কোনো পোস্ট নেই। প্রথম পোস্টটি আপনিই করুন!</div>';return;} 
+85	 root.innerHTML=items.map(p=>{const id=String(p.id),likes=allLikes[id]||[],comments=allComments[id]||[],liked=likes.some(x=>x.user_id===currentUser?.id),showNames=openLikers.has(id); 
+86	 return `<article class="card"><div class="row"><div class="avatar">${esc((p.author||'স').slice(0,1))}</div><div class="grow"><h2>${esc(p.author||'স্বজন সমাবেশ সদস্য')}</h2><div class="muted">${esc(new Date(p.created_at).toLocaleString('bn-BD'))}</div></div></div><div class="postbody">${esc(p.content)}</div><div class="muted" style="margin-bottom:9px">❤️ ${likes.length}টি প্রতিক্রিয়া · 💬 ${comments.length}টি মন্তব্য</div><div class="actions"><button class="action ${liked?'on':''}" data-like="${id}">${liked?'❤️ পছন্দ করেছেন':'♡ Like'}</button><button class="action" data-focus="${id}">💬 Comment</button><button class="action" data-likers="${id}">👥 কারা লাইক করেছেন (${likes.length})</button><button class="action" data-share="${id}">↗ Share</button></div><div class="comments ${showNames?'':'hidden'}" id="likers-${id}"><strong>লাইক দিয়েছেন:</strong>${likes.length?likes.map(l=>`<div class="comment">❤️ ${esc(l.user_name)}</div>`).join(''):'<div class="comment">এখনো কেউ লাইক দেননি।</div>'}</div><div class="comments" id="comments-${id}">${comments.map(c=>`<div class="comment"><strong>${esc(c.user_name)}</strong><div>${esc(c.content)}</div><div class="muted">${esc(new Date(c.created_at).toLocaleString('bn-BD'))}</div></div>`).join('')}</div><form class="commentbox" data-comment="${id}"><input name="comment" type="text" maxlength="300" placeholder="একটি মন্তব্য লিখুন..." required><button class="btn light">পাঠান</button></form></article>`;}).join(''); 
+87	} 
+88	async function loadPosts(){ 
+89	 if(!currentUser)return;postMessage('পোস্ট লোড হচ্ছে…'); 
+90	 try{const {data,error}=await supabaseClient.from('posts').select('*').order('created_at',{ascending:false}).limit(50);if(error)throw error;allPosts=data||[]; 
+91	 if(allPosts.length){const ids=allPosts.map(p=>p.id);const [lr,cr]=await Promise.all([supabaseClient.from('post_likes').select('post_id,user_id,user_name,created_at').in('post_id',ids),supabaseClient.from('post_comments').select('post_id,user_id,user_name,content,created_at').in('post_id',ids).order('created_at',{ascending:true})]);if(lr.error)throw lr.error;if(cr.error)throw cr.error;allLikes={};allComments={};(lr.data||[]).forEach(x=>(allLikes[String(x.post_id)]??=[]).push(x));(cr.data||[]).forEach(x=>(allComments[String(x.post_id)]??=[]).push(x));}else{allLikes={};allComments={};} 
+92	 drawPosts(allPosts);doSearch();postMessage(allPosts.length?'':'এখনো কোনো পোস্ট নেই।'); 
+93	 }catch(e){console.error(e);postMessage('ডাটা লোড সমস্যা: '+e.message);} 
+94	} 
+95	function doSearch(){if(!currentUser)return;const q=($('searchInput').value||'').trim().toLowerCase();drawPosts(!q?allPosts:allPosts.filter(p=>(p.content||'').toLowerCase().includes(q)||(p.author||'').toLowerCase().includes(q)),'searchResults');} 
+96	async function updateAuthUI(user){ 
+97	 currentUser=user;if(user){$('authCard').classList.add('hidden');$('feedView').classList.remove('hidden');try{await ensureProfile(user);$('signedInAs').textContent='লগইন করেছেন: '+memberName(user);$('profileEmail').textContent='ইমেইল ব্যক্তিগত · '+user.email;showView('feedView');}catch(e){authMessage('প্রোফাইল প্রস্তুত করা যায়নি: '+e.message);}}else{myProfile=null;$('authCard').classList.remove('hidden');['feedView','searchView','membersView','profileView'].forEach(v=>$(v).classList.add('hidden'));}} 
+98	$('loginBtn').addEventListener('click',async()=>{const email=$('email').value.trim(),password=$('password').value;if(!email||!password){authMessage('ইমেইল ও পাসওয়ার্ড দিন।');return;}$('loginBtn').disabled=true;authMessage('লগইন হচ্ছে…');try{const {data,error}=await supabaseClient.auth.signInWithPassword({email,password});if(error)throw error;await updateAuthUI(data.user);authMessage('লগইন সফল!');}catch(e){authMessage('লগইন ব্যর্থ: '+e.message);}finally{$('loginBtn').disabled=false;}}); 
+99	$('signupBtn').addEventListener('click',async()=>{const displayName=$('displayName').value.trim(),email=$('email').value.trim(),password=$('password').value;if(!displayName){authMessage('আপনার পূর্ণ নাম লিখুন।');return;}if(!email||password.length<6){authMessage('সঠিক ইমেইল ও ৬+ অক্ষরের পাসওয়ার্ড দিন।');return;}$('signupBtn').disabled=true;authMessage('অ্যাকাউন্ট তৈরি হচ্ছে…');try{const {data,error}=await supabaseClient.auth.signUp({email,password,options:{data:{display_name:displayName}}});if(error)throw error;if(data.session){await updateAuthUI(data.user);authMessage('অ্যাকাউন্ট তৈরি ও লগইন সফল!');}else authMessage('অ্যাকাউন্ট তৈরি হয়েছে। ইমেইল কনফার্ম করে লগইন করুন।');}catch(e){authMessage('সাইনআপ ব্যর্থ: '+e.message);}finally{$('signupBtn').disabled=false;}}); 
+100	$('logoutBtn').addEventListener('click',async()=>{const {error}=await supabaseClient.auth.signOut();if(error){alert(error.message);return;}updateAuthUI(null);authMessage('লগআউট হয়েছেন।');}); 
+101	$('publish').addEventListener('click',async()=>{const content=$('postText').value.trim();if(!content){postMessage('কিছু লিখুন।');return;}if(!currentUser)return;$('publish').disabled=true;postMessage('পোস্ট করা হচ্ছে…');try{const {error}=await supabaseClient.from('posts').insert({content,author:memberName(currentUser),user_id:currentUser.id});if(error)throw error;$('postText').value='';postMessage('পোস্ট হয়েছে!');await loadPosts();}catch(e){postMessage('পোস্ট ব্যর্থ: '+e.message);}finally{$('publish').disabled=false;}}); 
+102	document.addEventListener('click',async e=>{ 
+103	 const lb=e.target.closest('[data-like]');if(lb){const id=lb.dataset.like,existing=(allLikes[id]||[]).find(x=>x.user_id===currentUser.id);lb.disabled=true;try{const q=supabaseClient.from('post_likes');const r=existing?await q.delete().eq('post_id',id).eq('user_id',currentUser.id):await q.insert({post_id:Number(id),user_id:currentUser.id,user_name:memberName(currentUser)});if(r.error)throw r.error;await loadPosts();}catch(err){alert('লাইক পরিবর্তন করা যায়নি: '+err.message);}finally{lb.disabled=false;}} 
+104	 const names=e.target.closest('[data-likers]');if(names){const id=names.dataset.likers;openLikers.has(id)?openLikers.delete(id):openLikers.add(id);drawPosts(allPosts);if($('searchInput').value)doSearch();} 
+105	 const focus=e.target.closest('[data-focus]');if(focus)document.querySelector(`form[data-comment="${focus.dataset.focus}"] input`)?.focus(); 
+106	 const share=e.target.closest('[data-share]');if(share){const p=allPosts.find(x=>String(x.id)===share.dataset.share);if(p){if(navigator.share)navigator.share({title:'স্বজন সমাবেশ',text:p.content}).catch(()=>{});else if(navigator.clipboard)navigator.clipboard.writeText(p.content).then(()=>alert('কপি হয়েছে!')).catch(()=>alert(p.content));else alert(p.content);}} 
+107	 const send=e.target.closest('[data-friend]');if(send)await sendFriendRequest(send.dataset.friend,send); 
+108	 const accept=e.target.closest('[data-accept]');if(accept)await handleFriendAction('accept_friend_request',accept.dataset.accept); 
+109	 const reject=e.target.closest('[data-reject]');if(reject)await handleFriendAction('reject_friend_request',reject.dataset.reject); 
+110	 const remove=e.target.closest('[data-remove-friend]');if(remove&&confirm('এই সদস্যকে Friends List থেকে সরাতে চান?')){const {error}=await supabaseClient.from('friends').delete().or(`user1_id.eq.${currentUser.id},user2_id.eq.${currentUser.id}`).eq('id',remove.dataset.removeFriend);if(error)alert('সরানো যায়নি: '+error.message);else loadSocialData();} 
+111	}); 
+112	document.addEventListener('submit',async e=>{const form=e.target.closest('form[data-comment]');if(!form)return;e.preventDefault();const input=form.querySelector('[name=comment]'),content=input.value.trim();if(!content)return;const b=form.querySelector('button');b.disabled=true;try{const {error}=await supabaseClient.from('post_comments').insert({post_id:Number(form.dataset.comment),user_id:currentUser.id,user_name:memberName(currentUser),content});if(error)throw error;input.value='';await loadPosts();}catch(err){alert('কমেন্ট পাঠানো যায়নি: '+err.message);}finally{b.disabled=false;}}); 
+113	async function loadSocialData(){if(!currentUser)return;$('memberSearchStatus').textContent='';$('incomingRequests').innerHTML='লোড হচ্ছে…';$('outgoingRequests').innerHTML='লোড হচ্ছে…';$('friendsList').innerHTML='লোড হচ্ছে…';try{ 
+114	 const [incoming,outgoing,friendRows]=await Promise.all([ 
+115	 supabaseClient.from('friend_requests').select('id,requester_id,status,created_at').eq('receiver_id',currentUser.id).eq('status','pending').order('created_at',{ascending:false}), 
+116	 supabaseClient.from('friend_requests').select('id,receiver_id,status,created_at').eq('requester_id',currentUser.id).eq('status','pending').order('created_at',{ascending:false}), 
+117	 supabaseClient.from('friends').select('id,user1_id,user2_id,created_at').or(`user1_id.eq.${currentUser.id},user2_id.eq.${currentUser.id}`) 
+118	 ]); 
+119	 for(const r of [incoming,outgoing,friendRows])if(r.error)throw r.error; 
+120	 const ids=[...(incoming.data||[]).map(x=>x.requester_id),...(outgoing.data||[]).map(x=>x.receiver_id),...(friendRows.data||[]).map(x=>x.user1_id===currentUser.id?x.user2_id:x.user1_id)]; 
+121	 const profiles=await getProfiles(ids);const map=Object.fromEntries(profiles.map(p=>[p.id,p])); 
+122	 $('incomingRequests').innerHTML=(incoming.data||[]).length?incoming.data.map(r=>`<div class="member"><div class="avatar">${esc((map[r.requester_id]?.full_name||'س').slice(0,1))}</div><div class="grow"><strong>${esc(map[r.requester_id]?.full_name||'সদস্য')}</strong></div><button class="btn" data-accept="${r.id}">Accept</button><button class="btn danger" data-reject="${r.id}">Reject</button></div>`).join():'<div class="empty">কোনো নতুন Request নেই।</div>'; 
+123	 $('outgoingRequests').innerHTML=(outgoing.data||[]).length?outgoing.data.map(r=>`<div class="member"><div class="avatar">${esc((map[r.receiver_id]?.full_name||'স').slice(0,1))}</div><div class="grow">${esc(map[r.receiver_id]?.full_name||'সদস্য')}<div class="muted">অপেক্ষমাণ</div></div></div>`).join():'<div class="empty">কোনো পাঠানো Request নেই।</div>'; 
+124	 $('friendsList').innerHTML=(friendRows.data||[]).length?friendRows.data.map(r=>{const id=r.user1_id===currentUser.id?r.user2_id;return `<div class="member"><div class="avatar">${esc((map[id]?.full_name||'স').slice(0,1))}</div><div class="grow"><strong>${esc(map[id]?.full_name||'সদস্য')}</strong></div><button class="btn danger" data-remove-friend="${r.id}">Remove</button></div>`;}).join():'<div class="empty">আপনার Friends List এখনো খালি।</div>'; 
+125	 }catch(e){console.error(e);$('memberSearchStatus').textContent='Friend তথ্য লোড হয়নি: '+e.message;}} 
+126	async function getProfiles(ids){const unique=[...new Set(ids.filter(Boolean))];if(!unique.length)return[];const {data,error}=await supabaseClient.from('profiles').select('id,full_name,avatar_url,bio').in('id',unique);if(error)throw error;return data||[];} 
+127	let memberSearchTimer=null; 
+128	$('memberSearchInput').addEventListener('input',()=>{clearTimeout(memberSearchTimer);memberSearchTimer=setTimeout(searchMembers,350);}); 
+129	async function searchMembers(){if(!currentUser)return;const q=$('memberSearchInput').value.trim();const root=$('memberResults');if(q.length<2){root.innerHTML='';$('memberSearchStatus').textContent='কমপক্ষে ২ অক্ষরের নাম লিখুন।';return;}$('memberSearchStatus').textContent='খোঁজা হচ্ছে…';try{ 
+130	 const {data,error}=await supabaseClient.from('profiles').select('id,full_name,bio').ilike('full_name',`%${q}%`).neq('id',currentUser.id).order('full_name').limit(20);if(error)throw error; 
+131	 if(!data.length){root.innerHTML='<div class="empty">এই নামে কোনো সদস্য পাওয়া যায়নি।</div>';$('memberSearchStatus').textContent='';return;} 
+132	 const ids=data.map(x=>x.id);const [friends,requests]=await Promise.all([supabaseClient.from('friends').select('user1_id,user2_id').or(`user1_id.eq.${currentUser.id},user2_id.eq.${currentUser.id}`),supabaseClient.from('friend_requests').select('requester_id,receiver_id,status').or(`requester_id.eq.${currentUser.id},receiver_id.eq.${currentUser.id}`).eq('status','pending')]);if(friends.error)throw friends.error;if(requests.error)throw requests.error; 
+133	 const friendIds=new Set((friends.data||[]).map(x=>x.user1_id===currentUser.id?x.user2_id:x.user1_id));const pending=new Set((requests.data||[]).map(x=>x.requester_id===currentUser.id?x.receiver_id:x.requester_id)); 
+134	 root.innerHTML=data.map(p=>`<div class="member"><div class="avatar">${esc((p.full_name||'স').slice(0,1))}</div><div class="grow"><strong>${esc(p.full_name)}</strong><div class="muted">${esc(p.bio||'')}</div></div>${friendIds.has(p.id)?'<span class="muted">বন্ধু</span>':pending.has(p.id)?'<span class="muted">Request pending</span>':`<button class="btn" data-friend="${p.id}">Add Friend</button>`}</div>`).join('');$('memberSearchStatus').textContent=`${data.length} জন সদস্য পাওয়া গেছে।`; 
+135	 }catch(e){root.innerHTML='';$('memberSearchStatus').textContent='সদস্য খোঁজা যায়নি: '+e.message;}} 
+136	async function sendFriendRequest(receiverId,button){button.disabled=true;try{const {error}=await supabaseClient.from('friend_requests').insert({requester_id:currentUser.id,receiver_id:receiverId,status:'pending'});if(error)throw error;button.textContent='Request পাঠানো হয়েছে';button.disabled=true;await loadSocialData();}catch(e){alert('Friend Request পাঠানো যায়নি: '+e.message);button.disabled=false;}} 
+137	async function handleFriendAction(fn,id){try{const {error}=await supabaseClient.rpc(fn,{request_id:id});if(error)throw error;await loadSocialData();}catch(e){alert('অনুরোধটি সম্পন্ন হয়নি: '+e.message);}} 
+138	$('saveProfileBtn').addEventListener('click',async()=>{const full_name=$('profileName').value.trim(),bio=$('profileBio').value.trim();if(!full_name){$('profileStatus').textContent='পূর্ণ নাম লিখুন।';return;}$('saveProfileBtn').disabled=true;try{const {data,error}=await supabaseClient.from('profiles').upsert({id:currentUser.id,full_name,bio,updated_at:new Date().toISOString()}).select().single();if(error)throw error;myProfile=data;$('signedInAs').textContent='লগইন করেছেন: '+full_name;$('profileAvatar').textContent=full_name.slice(0,1);$('profileStatus').textContent='প্রোফাইল সংরক্ষিত হয়েছে।';}catch(e){$('profileStatus').textContent='সংরক্ষণ হয়নি: '+e.message;}finally{$('saveProfileBtn').disabled=false;}}); 
+139	$('searchInput').addEventListener('input',doSearch);document.querySelectorAll('.nav button').forEach(b=>b.addEventListener('click',()=>{if(!currentUser){authMessage('আগে লগইন করুন।');return;}showView(b.dataset.view);})); 
+140	document.addEventListener('visibilitychange',()=>{if(!document.hidden&&currentUser)loadPosts();}); 
+141	(async()=>{const {data}=await supabaseClient.auth.getSession();if(data?.session?.user)await updateAuthUI(data.session.user);supabaseClient.auth.onAuthStateChange((event,session)=>{if(event==='SIGNED_OUT')updateAuthUI(null);else if(session?.user&&!currentUser)setTimeout(()=>updateAuthUI(session.user),0);});})(); 
+142	if('serviceWorker'in navigator)navigator.serviceWorker.register('./sw.js').catch(e=>console.error('Service Worker:',e)); 
+143	</script> 
+144	</body> 
+145	</html> 

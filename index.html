@@ -25,7 +25,7 @@ input,button{font:inherit}input[type=text],input[type=email],input[type=password
 .nav{position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:1px solid var(--line);display:flex;justify-content:center;gap:4px;padding:9px 4px calc(9px + env(safe-area-inset-bottom));z-index:3} 
 .nav button{background:white;border:0;color:var(--muted);padding:8px 6px;border-radius:12px;cursor:pointer;font-size:13px}.nav button.active{background:var(--mint);color:var(--green);font-weight:800} 
 .member{display:flex;align-items:center;gap:10px;padding:11px 0;border-bottom:1px solid var(--line)}.member:last-child{border-bottom:0} 
-.chat-box{height:300px;overflow-y:auto;border:1px solid var(--line);border-radius:12px;padding:10px;background:#fafbfc;display:flex;flex-direction:column;gap:8px}
+.chat-box{height:250px;overflow-y:auto;border:1px solid var(--line);border-radius:12px;padding:10px;background:#fafbfc;display:flex;flex-direction:column;gap:8px}
 .msg{max-width:75%;padding:8px 12px;border-radius:14px;font-size:14px;line-height:1.4}
 .msg.me{align-self:flex-end;background:var(--green);color:white;border-bottom-right-radius:2px}
 .msg.them{align-self:flex-start;background:#e8ece9;color:var(--ink);border-bottom-left-radius:2px}
@@ -55,11 +55,27 @@ input,button{font:inherit}input[type=text],input[type=email],input[type=password
 
 <section id="chatView" class="hidden">
   <div class="card">
-    <h2>💬 আড্ডা ও চ্যাটিং</h2>
+    <h2>💬 আড্ডা ও চ্যাটিং ও কল</h2>
     <div style="display:flex; gap:8px; margin:10px 0;">
       <button class="btn" id="groupChatTabBtn">👥 গ্রুপ চ্যাট</button>
       <button class="btn light" id="privateChatTabBtn">👤 প্রাইভেট চ্যাট</button>
     </div>
+    
+    <!-- কল করার উইন্ডো বা স্ক্রিন -->
+    <div id="callContainer" class="hidden" style="margin-bottom:10px; background:#000; border-radius:12px; overflow:hidden; position:relative;">
+      <video id="remoteVideo" autoplay playsinline style="width:100%; height:220px; object-fit:cover; background:#111;"></video>
+      <video id="localVideo" autoplay playsinline muted style="width:100px; height:75px; object-fit:cover; position:absolute; bottom:10px; right:10px; border-radius:8px; border:2px solid #fff;"></video>
+      <div style="position:absolute; top:10px; left:10px; display:flex; gap:6px;">
+        <button class="btn danger" id="endCallBtn" style="padding:6px 10px; font-size:12px;">📞 কল কাটুন</button>
+      </div>
+    </div>
+
+    <!-- প্রাইভেট চ্যাটে কল বাটন -->
+    <div id="callControlPanel" class="hidden" style="display:flex; gap:8px; margin-bottom:8px;">
+      <button class="btn light" id="startAudioCallBtn">📞 অডিও কল</button>
+      <button class="btn light" id="startVideoCallBtn">📹 ভিডিও কল</button>
+    </div>
+
     <div id="chatTargetName" class="muted" style="margin-bottom:8px;">সবাই যুক্ত আছেন সাধারণ গ্রুপে</div>
     <div class="chat-box" id="chatBox"><div class="empty">মেসেজ লোড হচ্ছে...</div></div>
     <div style="display:flex; gap:8px; margin-top:10px;">
@@ -94,7 +110,7 @@ input,button{font:inherit}input[type=text],input[type=email],input[type=password
   <label class="muted" for="profileBio">পরিচিতি (Bio)</label>
   <textarea id="profileBio" maxlength="300" placeholder="নিজের সম্পর্কে সংক্ষেপে লিখুন..."></textarea>
   <div class="tools">
-    <span class="notice">আপনার প্রোফাইল তথ্য অন্য সদস্যরা দেখতে পাবেন।</span>
+    <span class="notice">আপনার প্রোফাইল তথ্য অন্য সদস্যরা দেখতে পারবেন।</span>
     <button class="btn" id="saveProfileBtn">প্রোফাইল সংরক্ষণ</button>
   </div>
   <div id="profileStatus" class="status"></div>
@@ -110,13 +126,18 @@ input,button{font:inherit}input[type=text],input[type=email],input[type=password
 <button data-view="profileView">👤 প্রোফাইল</button> 
 </nav> 
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script> 
+<!-- Supabase ও PeerJS লাইব্রেরি -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js"></script>
+
 <script> 
 const SUPABASE_URL='https://bfbgzbpogeilcffrhqru.supabase.co'; 
 const SUPABASE_PUBLISHABLE_KEY='sb_publishable_XoCQ72fZftVkdXfUBqP8OA_j7n21Gv9'; 
 const supabaseClient=window.supabase.createClient(SUPABASE_URL,SUPABASE_PUBLISHABLE_KEY); 
+
 let currentUser=null,allPosts=[],allLikes={},allComments={},openLikers=new Set(),myProfile=null,editingPostId=null; 
 let activeChatMode='group', activeDirectUser=null, chatInterval=null;
+let peer=null, localStream=null, currentCall=null;
 
 const $=id=>document.getElementById(id); 
 function esc(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));} 
@@ -182,7 +203,8 @@ function drawPosts(items,target='posts'){
         mediaHtml = `<img src="${esc(p.image_url)}" style="width:100%; border-radius:12px; margin-top:10px; max-height:450px; object-fit:cover;" alt="Post image">`;
       }
     }
-      let editSection = '';
+
+    let editSection = '';
     if(editingPostId===id){
       editSection = `<div style="margin-top:10px;">
         <textarea id="editText-${id}" style="width:100%; min-height:60px;" maxlength="5000">${esc(p.content)}</textarea>
@@ -263,13 +285,75 @@ async function updateAuthUI(user){
       $('signedInAs').textContent='লগইন করেছেন: '+memberName(user);
       renderAvatar($('headerAvatar'), myProfile);
       showView('feedView');
+      setupPeerConnection(user.id);
     }catch(e){authMessage('প্রোফাইল প্রস্তুত করা যায়নি: '+e.message);}
   }else{
     myProfile=null;
+    if(peer){ peer.destroy(); peer=null; }
     $('authCard').classList.remove('hidden');
     ['feedView','chatView','searchView','membersView','profileView'].forEach(v=>$(v).classList.add('hidden'));
   }
 } 
+  // PeerJS কল সেটআপ
+function setupPeerConnection(userId){
+  if(peer) return;
+  peer = new Peer(userId);
+  peer.on('call', async call => {
+    if(confirm('আপনার কাছে একটি কল এসেছে। রিসিভ করতে চান?')){
+      try {
+        localStream = await navigator.mediaDevices.getUserMedia({video: true, audio: true});
+        $('localVideo').srcObject = localStream;
+        $('callContainer').classList.remove('hidden');
+        call.answer(localStream);
+        currentCall = call;
+        call.on('stream', remoteStream => {
+          $('remoteVideo').srcObject = remoteStream;
+        });
+        call.on('close', stopCall);
+      } catch(e) {
+        alert('ক্যামেরা বা মাইক্রোফোন এক্সেস পাওয়া যায়নি: '+e.message);
+      }
+    } else {
+      call.close();
+    }
+  });
+}
+
+async function startCall(isVideo){
+  if(!activeDirectUser) { alert('আগে প্রাইভেট চ্যাটে বন্ধু সিলেক্ট করুন।'); return; }
+  try {
+    localStream = await navigator.mediaDevices.getUserMedia({video: isVideo, audio: true});
+    $('localVideo').srcObject = localStream;
+    $('callContainer').classList.remove('hidden');
+    
+    const call = peer.call(activeDirectUser.id, localStream);
+    currentCall = call;
+    call.on('stream', remoteStream => {
+      $('remoteVideo').srcObject = remoteStream;
+    });
+    call.on('close', stopCall);
+  } catch(e) {
+    alert('কল শুরু করা যায়নি (ক্যামেরা/মাইক্রোফোন পারমিশন চেক করুন): '+e.message);
+  }
+}
+
+function stopCall(){
+  if(localStream){
+    localStream.getTracks().forEach(t => t.stop());
+    localStream = null;
+  }
+  if(currentCall){
+    currentCall.close();
+    currentCall = null;
+  }
+  $('callContainer').classList.add('hidden');
+  $('localVideo').srcObject = null;
+  $('remoteVideo').srcObject = null;
+}
+
+$('endCallBtn').addEventListener('click', stopCall);
+$('startAudioCallBtn').addEventListener('click', () => startCall(false));
+$('startVideoCallBtn').addEventListener('click', () => startCall(true));
 
 function initChatView(){
   if(chatInterval) clearInterval(chatInterval);
@@ -283,10 +367,13 @@ async function loadMessages(){
     let q = supabaseClient.from('messages').select('*').order('created_at', {ascending: true});
     if(activeChatMode==='group'){
       q = q.eq('group_id', 'general_group');
+      $('callControlPanel').classList.add('hidden');
     } else if(activeDirectUser) {
       q = q.or(`and(sender_id.eq.${currentUser.id},receiver_id.eq.${activeDirectUser.id}),and(sender_id.eq.${activeDirectUser.id},receiver_id.eq.${currentUser.id})`);
+      $('callControlPanel').classList.remove('hidden');
     } else {
       $('chatBox').innerHTML = '<div class="empty">কাউকে নির্বাচন করে প্রাইভেট চ্যাট শুরু করুন।</div>';
+      $('callControlPanel').classList.add('hidden');
       return;
     }
     const {data, error} = await q.limit(100);
@@ -312,10 +399,7 @@ $('sendMsgBtn').addEventListener('click', async () => {
   if(!text || !currentUser) return;
   $('chatInput').value = '';
   try {
-    const payload = {
-      sender_id: currentUser.id,
-      content: text
-    };
+    const payload = { sender_id: currentUser.id, content: text };
     if(activeChatMode === 'group') payload.group_id = 'general_group';
     else if(activeDirectUser) payload.receiver_id = activeDirectUser.id;
     else return;
@@ -334,12 +418,14 @@ $('groupChatTabBtn').addEventListener('click', () => {
   $('groupChatTabBtn').className = 'btn';
   $('privateChatTabBtn').className = 'btn light';
   $('chatTargetName').textContent = 'সবাই যুক্ত আছেন সাধারণ গ্রুপে';
+  $('callControlPanel').classList.add('hidden');
+  stopCall();
   loadMessages();
 });
 
 $('privateChatTabBtn').addEventListener('click', () => {
   showView('membersView');
-  alert("আপনার ফ্রেন্ডস লিস্ট থেকে যার সাথে কথা বলতে চান তার নামের পাশে 'Chat' বাটনে ক্লিক করুন।");
+  alert("আপনার ফ্রেন্ডস লিস্ট থেকে যার সাথে কথা বলতে চান তার নামের পাশে '💬 Chat' বাটনে ক্লিক করুন।");
 });
 
 $('saveProfileBtn').addEventListener('click',async()=>{
@@ -360,11 +446,7 @@ $('saveProfileBtn').addEventListener('click',async()=>{
     }
 
     const {data,error}=await supabaseClient.from('profiles').upsert({
-      id:currentUser.id,
-      full_name,
-      bio,
-      avatar_url: avatarUrl,
-      updated_at:new Date().toISOString()
+      id:currentUser.id, full_name, bio, avatar_url: avatarUrl, updated_at:new Date().toISOString()
     }).select().single();
 
     if(error)throw error;
@@ -438,10 +520,7 @@ $('publish').addEventListener('click',async()=>{
     }
 
     const {error}=await supabaseClient.from('posts').insert({
-      content: content,
-      author: memberName(currentUser),
-      user_id: currentUser.id,
-      image_url: imageUrl
+      content: content, author: memberName(currentUser), user_id: currentUser.id, image_url: imageUrl
     });
     
     if(error)throw error;
@@ -454,9 +533,8 @@ $('publish').addEventListener('click',async()=>{
   }finally{
     $('publish').disabled=false;
   }
-}); 
-
-document.addEventListener('click',async e=>{ 
+});
+  document.addEventListener('click',async e=>{ 
   const lb=e.target.closest('[data-like]');
   if(lb){
     const id=lb.dataset.like,existing=(allLikes[id]||[]).find(x=>x.user_id===currentUser.id);
@@ -498,7 +576,7 @@ document.addEventListener('click',async e=>{
     activeDirectUser = { id: friendId, name: friendName };
     $('groupChatTabBtn').className = 'btn light';
     $('privateChatTabBtn').className = 'btn';
-    $('chatTargetName').textContent = 'কথা বলছেন: ' + friendName;
+    $('chatTargetName').textContent = 'কথা বলছেন (প্রাইভেট): ' + friendName;
     showView('chatView');
   }
 
@@ -552,7 +630,8 @@ async function loadSocialData(){
     }).join():'<div class="empty">আপনার Friends List এখনো খালি।</div>'; 
   }catch(e){console.error(e);$('memberSearchStatus').textContent='Friend তথ্য লোড হয়নি: '+e.message;}
 } 
-  async function getProfiles(ids){
+
+async function getProfiles(ids){
   const unique=[...new Set(ids.filter(Boolean))];if(!unique.length)return[];
   const {data,error}=await supabaseClient.from('profiles').select('id,full_name,avatar_url,bio').in('id',unique);
   if(error)throw error;return data||[];

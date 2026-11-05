@@ -692,7 +692,7 @@ document.addEventListener('visibilitychange',()=>{if(!document.hidden&&currentUs
   }catch(err){console.error("Session error:", err);}
   
   supabaseClient.auth.onAuthStateChange((event,session)=>{
-    .if(event==='SIGNED_OUT') updateAuthUI(null);
+    if(event==='SIGNED_OUT') updateAuthUI(null);
     else if(session?.user && !currentUser) setTimeout(()=>updateAuthUI(session.user),0);
   });
 })(); 

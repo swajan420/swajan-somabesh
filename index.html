@@ -33,21 +33,21 @@ input,button{font:inherit}input[type=text],input[type=email],input[type=password
 </style> 
 </head> 
 <body> 
-<header><div class="head"><div class="logo">🤝</div><div class="grow"><div class="brand">স্বজন সমাবেশ</div><div class="tag">Swajan Somabesh · মানুষের সঙ্গে মানুষের সংযোগ</div></div></div></header> 
+<header><div class="head"><div class="logo">🤝</div><div class="grow"><div class="brand">স্বজন সমাবেশ</div><div class="tag">Swajan Somabesh · People to People Connection</div></div></div></header> 
 <main class="wrap"> 
 <section id="authCard" class="card"> 
-<h2>সদস্য লগইন / নতুন অ্যাকাউন্ট</h2><p class="muted" style="margin:6px 0 10px">পোস্ট দেখতে ও লিখতে আগে লগইন করুন।</p> 
-<div id="signupFields"><input id="displayName" type="text" maxlength="60" placeholder="আপনার পূর্ণ নাম (নতুন অ্যাকাউন্টের জন্য)"></div> 
-<input id="email" type="email" autocomplete="email" placeholder="ইমেইল ঠিকানা"><input id="password" type="password" autocomplete="current-password" minlength="6" placeholder="পাসওয়ার্ড (কমপক্ষে ৬ অক্ষর)"> 
-<div class="tools"><button class="btn" id="loginBtn">লগইন</button><button class="btn light" id="signupBtn">নতুন অ্যাকাউন্ট খুলুন</button></div><div id="authStatus" class="status" role="status"></div> 
+<h2>Member Login / Sign Up</h2><p class="muted" style="margin:6px 0 10px">পোস্ট দেখতে ও লিখতে আগে Login করুন।</p> 
+<div id="signupFields"><input id="displayName" type="text" maxlength="60" placeholder="Your Full Name (For New Account)"></div> 
+<input id="email" type="email" autocomplete="email" placeholder="Email Address"><input id="password" type="password" autocomplete="current-password" minlength="6" placeholder="Password (Min 6 Characters)"> 
+<div class="tools"><button class="btn" id="loginBtn">Login</button><button class="btn light" id="signupBtn">Create Account</button></div><div id="authStatus" class="status" role="status"></div> 
 </section> 
 
 <section id="feedView" class="hidden"> 
-<div class="card"><div class="row"><div class="avatar" id="headerAvatar">স</div><div class="grow"><h2>আপনার নিউজ ফিড</h2><div class="muted">সদস্যদের সবার পোস্ট এখানে দেখা যাবে</div></div><button class="btn light" id="logoutBtn">লগআউট</button></div><div id="signedInAs" class="status"></div></div> 
+<div class="card"><div class="row"><div class="avatar" id="headerAvatar">স</div><div class="grow"><h2>News Feed</h2><div class="muted">সদস্যদের সবার পোস্ট এখানে দেখা যাবে</div></div><button class="btn light" id="logoutBtn">Logout</button></div><div id="signedInAs" class="status"></div></div> 
 <div class="card">
-  <textarea id="postText" maxlength="5000" placeholder="আপনার মনে কী আছে? লিখুন..."></textarea>
+  <textarea id="postText" maxlength="5000" placeholder="What's on your mind? Write here..."></textarea>
   <input type="file" id="postFile" accept="image/*,video/*" style="margin-top:10px;">
-  <div class="tools"><span class="muted">🌿 ছবি বা ভিডিওসহ পোস্ট করুন</span><button class="btn" id="publish">পোস্ট করুন</button></div>
+  <div class="tools"><span class="muted">🌿 ছবি বা ভিডিওসহ Post করুন</span><button class="btn" id="publish">Post Publish</button></div>
   <div id="postStatus" class="status"></div>
 </div>
 <div id="posts"></div> 
@@ -55,43 +55,43 @@ input,button{font:inherit}input[type=text],input[type=email],input[type=password
 
 <section id="chatView" class="hidden">
   <div class="card">
-    <h2>💬 আড্ডা ও চ্যাটিং ও কল</h2>
+    <h2>💬 Live Chat & Voice/Video Call</h2>
     <div style="display:flex; gap:8px; margin:10px 0;">
-      <button class="btn" id="groupChatTabBtn">👥 গ্রুপ চ্যাট</button>
-      <button class="btn light" id="privateChatTabBtn">👤 প্রাইভেট চ্যাট</button>
+      <button class="btn" id="groupChatTabBtn">👥 Group Chat</button>
+      <button class="btn light" id="privateChatTabBtn">👤 Private Chat</button>
     </div>
     
-    <!-- কল করার উইন্ডো বা স্ক্রিন -->
+    <!-- Call Window -->
     <div id="callContainer" class="hidden" style="margin-bottom:10px; background:#000; border-radius:12px; overflow:hidden; position:relative;">
       <video id="remoteVideo" autoplay playsinline style="width:100%; height:220px; object-fit:cover; background:#111;"></video>
       <video id="localVideo" autoplay playsinline muted style="width:100px; height:75px; object-fit:cover; position:absolute; bottom:10px; right:10px; border-radius:8px; border:2px solid #fff;"></video>
       <div style="position:absolute; top:10px; left:10px; display:flex; gap:6px;">
-        <button class="btn danger" id="endCallBtn" style="padding:6px 10px; font-size:12px;">📞 কল কাটুন</button>
+        <button class="btn danger" id="endCallBtn" style="padding:6px 10px; font-size:12px;">📞 End Call</button>
       </div>
     </div>
 
-    <!-- প্রাইভেট চ্যাটে কল বাটন -->
+    <!-- Call Control Panel -->
     <div id="callControlPanel" class="hidden" style="display:flex; gap:8px; margin-bottom:8px;">
-      <button class="btn light" id="startAudioCallBtn">📞 অডিও কল</button>
-      <button class="btn light" id="startVideoCallBtn">📹 ভিডিও কল</button>
+      <button class="btn light" id="startAudioCallBtn">📞 Audio Call</button>
+      <button class="btn light" id="startVideoCallBtn">📹 Video Call</button>
     </div>
 
-    <div id="chatTargetName" class="muted" style="margin-bottom:8px;">সবাই যুক্ত আছেন সাধারণ গ্রুপে</div>
-    <div class="chat-box" id="chatBox"><div class="empty">মেসেজ লোড হচ্ছে...</div></div>
+    <div id="chatTargetName" class="muted" style="margin-bottom:8px;">সবাই যুক্ত আছেন General Group-এ</div>
+    <div class="chat-box" id="chatBox"><div class="empty">Messages loading...</div></div>
     <div style="display:flex; gap:8px; margin-top:10px;">
-      <input type="text" id="chatInput" placeholder="মেসেজ লিখুন..." style="margin:0;">
-      <button class="btn" id="sendMsgBtn">পাঠান</button>
+      <input type="text" id="chatInput" placeholder="Write a message..." style="margin:0;">
+      <button class="btn" id="sendMsgBtn">Send</button>
     </div>
   </div>
 </section>
 
-<section id="searchView" class="hidden"><div class="card"><h2 style="margin-bottom:10px">পোস্ট খুঁজুন</h2><input id="searchInput" type="text" placeholder="পোস্টের লেখা দিয়ে খুঁজুন..."></div><div id="searchResults"></div></section> 
+<section id="searchView" class="hidden"><div class="card"><h2 style="margin-bottom:10px">Search Posts</h2><input id="searchInput" type="text" placeholder="Search by post content..."></div><div id="searchResults"></div></section> 
 
 <section id="membersView" class="hidden"> 
-<div class="card"><h2>🔎 সদস্য খুঁজুন</h2><p class="muted" style="margin:5px 0 10px">সদস্যের পূর্ণ নাম লিখে খুঁজুন।</p><input id="memberSearchInput" type="text" maxlength="60" placeholder="সদস্যের নাম লিখুন..."><div id="memberSearchStatus" class="status"></div><div id="memberResults"></div></div> 
-<div class="card"><h2>📩 আসা Friend Request</h2><div id="incomingRequests"><div class="empty">লোড হচ্ছে…</div></div></div> 
-<div class="card"><h2>📤 পাঠানো Friend Request</h2><div id="outgoingRequests"><div class="empty">লোড হচ্ছে…</div></div></div> 
-<div class="card"><h2>🤝 আমার Friends List</h2><div id="friendsList"><div class="empty">লোড হচ্ছে…</div></div></div> 
+<div class="card"><h2>🔎 Find Members</h2><p class="muted" style="margin:5px 0 10px">সদস্যের নাম লিখে খুঁজুন।</p><input id="memberSearchInput" type="text" maxlength="60" placeholder="Search member name..."><div id="memberSearchStatus" class="status"></div><div id="memberResults"></div></div> 
+<div class="card"><h2>📩 Incoming Friend Requests</h2><div id="incomingRequests"><div class="empty">Loading…</div></div></div> 
+<div class="card"><h2>📤 Sent Friend Requests</h2><div id="outgoingRequests"><div class="empty">Loading…</div></div></div> 
+<div class="card"><h2>🤝 My Friends List</h2><div id="friendsList"><div class="empty">Loading…</div></div></div> 
 </section> 
 
 <section id="profileView" class="hidden"> 
@@ -99,19 +99,19 @@ input,button{font:inherit}input[type=text],input[type=email],input[type=password
   <div class="row">
     <div class="avatar" style="width:65px;height:65px;font-size:24px" id="profileAvatar">স</div>
     <div class="grow">
-      <h2>আপনার প্রোফাইল</h2>
-      <div class="muted" id="profileEmail">ইমেইল সংগৃহীত</div>
+      <h2>My Profile</h2>
+      <div class="muted" id="profileEmail">Email Private</div>
     </div>
   </div> 
-  <label class="muted" style="margin-top:10px; display:block;">প্রোফাইল ছবি পরিবর্তন করুন</label>
+  <label class="muted" style="margin-top:10px; display:block;">প্রোফাইল ছবি পরিবর্তন করুন (Change Avatar)</label>
   <input type="file" id="avatarFile" accept="image/*">
-  <label class="muted" for="profileName">আপনার পূর্ণ নাম</label>
-  <input id="profileName" type="text" maxlength="60" placeholder="আপনার নাম">
-  <label class="muted" for="profileBio">পরিচিতি (Bio)</label>
-  <textarea id="profileBio" maxlength="300" placeholder="নিজের সম্পর্কে সংক্ষেপে লিখুন..."></textarea>
+  <label class="muted" for="profileName">Full Name</label>
+  <input id="profileName" type="text" maxlength="60" placeholder="Your Name">
+  <label class="muted" for="profileBio">Bio / Introduction</label>
+  <textarea id="profileBio" maxlength="300" placeholder="Write about yourself..."></textarea>
   <div class="tools">
-    <span class="notice">আপনার প্রোফাইল তথ্য অন্য সদস্যরা দেখতে পারবেন।</span>
-    <button class="btn" id="saveProfileBtn">প্রোফাইল সংরক্ষণ</button>
+    <span class="notice">আপনার প্রোফাইল তথ্য অন্য সদস্যরা দেখতে পাবেন।</span>
+    <button class="btn" id="saveProfileBtn">Save Profile</button>
   </div>
   <div id="profileStatus" class="status"></div>
 </div> 
@@ -119,14 +119,13 @@ input,button{font:inherit}input[type=text],input[type=email],input[type=password
 </main> 
 
 <nav class="nav"> 
-<button class="active" data-view="feedView">🏠 হোম</button>
-<button data-view="chatView">💬 চ্যাট</button>
-<button data-view="searchView">🔎 খুঁজুন</button>
-<button data-view="membersView">👥 সদস্য</button>
-<button data-view="profileView">👤 প্রোফাইল</button> 
+<button class="active" data-view="feedView">🏠 Home</button>
+<button data-view="chatView">💬 Chat</button>
+<button data-view="searchView">🔎 Search</button>
+<button data-view="membersView">👥 Members</button>
+<button data-view="profileView">👤 Profile</button> 
 </nav> 
 
-<!-- Supabase ও PeerJS লাইব্রেরি -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <script src="https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js"></script>
 
@@ -184,13 +183,13 @@ async function loadProfile(){
     if(!myProfile)await ensureProfile(currentUser);
     $('profileName').value=myProfile.full_name||'';
     $('profileBio').value=myProfile.bio||'';
-    $('profileEmail').textContent='ইমেইল ব্যক্তিগত · '+currentUser.email;
+    $('profileEmail').textContent='Email Private · '+currentUser.email;
     renderAvatar($('profileAvatar'), myProfile);
-  }catch(e){$('profileStatus').textContent='প্রোফাইল লোড হয়নি: '+e.message;} 
+  }catch(e){$('profileStatus').textContent='Profile load failed: '+e.message;} 
 } 
 
 function drawPosts(items,target='posts'){ 
-  const root=$(target);if(!items.length){root.innerHTML='<div class="card empty">এখনো কোনো পোস্ট নেই। প্রথম পোস্টটি আপনিই করুন!</div>';return;} 
+  const root=$(target);if(!items.length){root.innerHTML='<div class="card empty">No posts yet. Be the first to publish!</div>';return;} 
   root.innerHTML=items.map(p=>{
     const id=String(p.id),likes=allLikes[id]||[],comments=allComments[id]||[],liked=likes.some(x=>x.user_id===currentUser?.id),showNames=openLikers.has(id); 
     const isOwner=currentUser && p.user_id===currentUser.id;
@@ -209,8 +208,8 @@ function drawPosts(items,target='posts'){
       editSection = `<div style="margin-top:10px;">
         <textarea id="editText-${id}" style="width:100%; min-height:60px;" maxlength="5000">${esc(p.content)}</textarea>
         <div style="display:flex; gap:8px; margin-top:6px;">
-          <button class="btn" data-save-edit="${id}">সংরক্ষণ</button>
-          <button class="btn light" data-cancel-edit="${id}">বাতিল</button>
+          <button class="btn" data-save-edit="${id}">Save</button>
+          <button class="btn light" data-cancel-edit="${id}">Cancel</button>
         </div>
       </div>`;
     }
@@ -219,35 +218,34 @@ function drawPosts(items,target='posts'){
       <div class="row">
         <div class="avatar">${esc((p.author||'স').slice(0,1))}</div>
         <div class="grow">
-          <h2>${esc(p.author||'স্বজন সমাবেশ সদস্য')}</h2>
+          <h2>${esc(p.author||'Swajan Member')}</h2>
           <div class="muted">${esc(new Date(p.created_at).toLocaleString('bn-BD'))}</div>
         </div>
-        ${isOwner && editingPostId!==id ? `<button class="btn light" style="padding:4px 8px; font-size:12px;" data-edit-post="${id}">এডিট</button>` : ''}
+        ${isOwner && editingPostId!==id ? `<button class="btn light" style="padding:4px 8px; font-size:12px;" data-edit-post="${id}">Edit</button>` : ''}
       </div>
       ${editingPostId===id ? editSection : `<div class="postbody">${esc(p.content)}</div>${mediaHtml}`}
-      <div class="muted" style="margin:9px 0">❤️ ${likes.length}টি প্রতিক্রিয়া · 💬 ${comments.length}টি মন্তব্য</div>
+      <div class="muted" style="margin:9px 0">❤️ ${likes.length} Likes · 💬 ${comments.length} Comments</div>
       <div class="actions">
-        <button class="action ${liked?'on':''}" data-like="${id}">${liked?'❤️ পছন্দ করেছেন':'♡ Like'}</button>
+        <button class="action ${liked?'on':''}" data-like="${id}">${liked?'❤️ Liked':'♡ Like'}</button>
         <button class="action" data-focus="${id}">💬 Comment</button>
-        <button class="action" data-likers="${id}">👥 কারা লাইক করেছেন (${likes.length})</button>
+        <button class="action" data-likers="${id}">👥 Liked By (${likes.length})</button>
         <button class="action" data-share="${id}">↗ Share</button>
       </div>
       <div class="comments ${showNames?'':'hidden'}" id="likers-${id}">
-        <strong>লাইক দিয়েছেন:</strong>${likes.length?likes.map(l=>`<div class="comment">❤️ ${esc(l.user_name)}</div>`).join(''):'<div class="comment">এখনো কেউ লাইক দেননি।</div>'}
+        <strong>Liked by:</strong>${likes.length?likes.map(l=>`<div class="comment">❤️ ${esc(l.user_name)}</div>`).join(''):'<div class="comment">No likes yet.</div>'}
       </div>
       <div class="comments" id="comments-${id}">
         ${comments.map(c=>`<div class="comment"><strong>${esc(c.user_name)}</strong><div>${esc(c.content)}</div><div class="muted">${esc(new Date(c.created_at).toLocaleString('bn-BD'))}</div></div>`).join('')}
       </div>
       <form class="commentbox" data-comment="${id}">
-        <input name="comment" type="text" maxlength="300" placeholder="একটি মন্তব্য লিখুন..." required>
-        <button class="btn light">পাঠান</button>
+        <input name="comment" type="text" maxlength="300" placeholder="Write a comment..." required>
+        <button class="btn light">Send</button>
       </form>
     </article>`;
   }).join(''); 
 } 
-
-async function loadPosts(){ 
-  if(!currentUser)return;postMessage('পোস্ট লোড হচ্ছে…'); 
+                                                                                                           async function loadPosts(){ 
+  if(!currentUser)return;postMessage('Loading posts…'); 
   try{
     const {data,error}=await supabaseClient.from('posts').select('*').order('created_at',{ascending:false}).limit(50);
     if(error)throw error;
@@ -265,8 +263,8 @@ async function loadPosts(){
     }else{
       allLikes={};allComments={};
     } 
-    drawPosts(allPosts);doSearch();postMessage(allPosts.length?'':'এখনো কোনো পোস্ট নেই।'); 
-  }catch(e){console.error(e);postMessage('ডাটা লোড সমস্যা: '+e.message);} 
+    drawPosts(allPosts);doSearch();postMessage(allPosts.length?'':'No posts available.'); 
+  }catch(e){console.error(e);postMessage('Data load error: '+e.message);} 
 } 
 
 function doSearch(){
@@ -282,11 +280,11 @@ async function updateAuthUI(user){
     $('feedView').classList.remove('hidden');
     try{
       await ensureProfile(user);
-      $('signedInAs').textContent='লগইন করেছেন: '+memberName(user);
+      $('signedInAs').textContent='Logged in as: '+memberName(user);
       renderAvatar($('headerAvatar'), myProfile);
       showView('feedView');
       setupPeerConnection(user.id);
-    }catch(e){authMessage('প্রোফাইল প্রস্তুত করা যায়নি: '+e.message);}
+    }catch(e){authMessage('Profile setup error: '+e.message);}
   }else{
     myProfile=null;
     if(peer){ peer.destroy(); peer=null; }
@@ -294,12 +292,12 @@ async function updateAuthUI(user){
     ['feedView','chatView','searchView','membersView','profileView'].forEach(v=>$(v).classList.add('hidden'));
   }
 } 
-  // PeerJS কল সেটআপ
+
 function setupPeerConnection(userId){
   if(peer) return;
   peer = new Peer(userId);
   peer.on('call', async call => {
-    if(confirm('আপনার কাছে একটি কল এসেছে। রিসিভ করতে চান?')){
+    if(confirm('Incoming call detected. Do you want to accept?')){
       try {
         localStream = await navigator.mediaDevices.getUserMedia({video: true, audio: true});
         $('localVideo').srcObject = localStream;
@@ -311,7 +309,7 @@ function setupPeerConnection(userId){
         });
         call.on('close', stopCall);
       } catch(e) {
-        alert('ক্যামেরা বা মাইক্রোফোন এক্সেস পাওয়া যায়নি: '+e.message);
+        alert('Camera/Microphone access error: '+e.message);
       }
     } else {
       call.close();
@@ -320,7 +318,7 @@ function setupPeerConnection(userId){
 }
 
 async function startCall(isVideo){
-  if(!activeDirectUser) { alert('আগে প্রাইভেট চ্যাটে বন্ধু সিলেক্ট করুন।'); return; }
+  if(!activeDirectUser) { alert('Please select a friend from private chat first.'); return; }
   try {
     localStream = await navigator.mediaDevices.getUserMedia({video: isVideo, audio: true});
     $('localVideo').srcObject = localStream;
@@ -333,7 +331,7 @@ async function startCall(isVideo){
     });
     call.on('close', stopCall);
   } catch(e) {
-    alert('কল শুরু করা যায়নি (ক্যামেরা/মাইক্রোফোন পারমিশন চেক করুন): '+e.message);
+    alert('Call start failed (Check camera/mic permissions): '+e.message);
   }
 }
 
@@ -372,7 +370,7 @@ async function loadMessages(){
       q = q.or(`and(sender_id.eq.${currentUser.id},receiver_id.eq.${activeDirectUser.id}),and(sender_id.eq.${activeDirectUser.id},receiver_id.eq.${currentUser.id})`);
       $('callControlPanel').classList.remove('hidden');
     } else {
-      $('chatBox').innerHTML = '<div class="empty">কাউকে নির্বাচন করে প্রাইভেট চ্যাট শুরু করুন।</div>';
+      $('chatBox').innerHTML = '<div class="empty">Please select someone to start private chat.</div>';
       $('callControlPanel').classList.add('hidden');
       return;
     }
@@ -380,17 +378,15 @@ async function loadMessages(){
     if(error) throw error;
     
     if(!data.length){
-      $('chatBox').innerHTML = '<div class="empty">কোনো মেসেজ নেই। নতুন কথোপকথন শুরু করুন!</div>';
+      $('chatBox').innerHTML = '<div class="empty">No messages yet. Start conversation!</div>';
       return;
     }
-
-  $('chatBox').innerHTML = data.map(m => {
+    
+    $('chatBox').innerHTML = data.map(m => {
       const isMe = (currentUser && m.sender_id === currentUser.id);
       return `<div class="msg ${isMe ? 'me' : 'them'}">${esc(m.content)}</div>`;
     }).join('');
-    
-
-  $('chatBox').scrollTop = $('chatBox').scrollHeight;
+    $('chatBox').scrollTop = $('chatBox').scrollHeight;
   } catch(e) {
     console.error("Chat load error:", e);
   }
@@ -410,7 +406,7 @@ $('sendMsgBtn').addEventListener('click', async () => {
     if(error) throw error;
     await loadMessages();
   } catch(e) {
-    alert("মেসেজ পাঠানো যায়নি: " + e.message);
+    alert("Message send failed: " + e.message);
   }
 });
 
@@ -419,7 +415,7 @@ $('groupChatTabBtn').addEventListener('click', () => {
   activeDirectUser = null;
   $('groupChatTabBtn').className = 'btn';
   $('privateChatTabBtn').className = 'btn light';
-  $('chatTargetName').textContent = 'সবাই যুক্ত আছেন সাধারণ গ্রুপে';
+  $('chatTargetName').textContent = 'সবাই যুক্ত আছেন General Group-এ';
   $('callControlPanel').classList.add('hidden');
   stopCall();
   loadMessages();
@@ -427,15 +423,15 @@ $('groupChatTabBtn').addEventListener('click', () => {
 
 $('privateChatTabBtn').addEventListener('click', () => {
   showView('membersView');
-  alert("আপনার ফ্রেন্ডস লিস্ট থেকে যার সাথে কথা বলতে চান তার নামের পাশে '💬 Chat' বাটনে ক্লিক করুন।");
+  alert("আপনার Friends List থেকে যার সাথে চ্যাট করতে চান তার নামের পাশে '💬 Chat' বাটনে ক্লিক করুন।");
 });
 
 $('saveProfileBtn').addEventListener('click',async()=>{
   const full_name=$('profileName').value.trim(),bio=$('profileBio').value.trim();
   const avatarFile=$('avatarFile').files[0];
-  if(!full_name){$('profileStatus').textContent='পূর্ণ নাম লিখুন।';return;}
+  if(!full_name){$('profileStatus').textContent='Please enter full name.';return;}
   $('saveProfileBtn').disabled=true;
-  $('profileStatus').textContent='সংরক্ষণ হচ্ছে…';
+  $('profileStatus').textContent='Saving profile…';
   try{
     let avatarUrl = myProfile?.avatar_url || null;
     if(avatarFile){
@@ -453,49 +449,49 @@ $('saveProfileBtn').addEventListener('click',async()=>{
 
     if(error)throw error;
     myProfile=data;
-    $('signedInAs').textContent='লগইন করেছেন: '+full_name;
+    $('signedInAs').textContent='Logged in as: '+full_name;
     renderAvatar($('headerAvatar'), myProfile);
     renderAvatar($('profileAvatar'), myProfile);
-    $('profileStatus').textContent='প্রোফাইল চমৎকারভাবে সংরক্ষিত হয়েছে!';
-  }catch(e){$('profileStatus').textContent='সংরক্ষণ হয়নি: '+e.message;}
+    $('profileStatus').textContent='Profile successfully saved!';
+  }catch(e){$('profileStatus').textContent='Save failed: '+e.message;}
   finally{$('saveProfileBtn').disabled=false;}
 }); 
 
 $('loginBtn').addEventListener('click',async()=>{
   const email=$('email').value.trim(),password=$('password').value;
-  if(!email||!password){authMessage('ইমেইল ও পাসওয়ার্ড দিন।');return;}
-  $('loginBtn').disabled=true;authMessage('লগইন হচ্ছে…');
+  if(!email||!password){authMessage('Please enter email and password.');return;}
+  $('loginBtn').disabled=true;authMessage('Logging in…');
   try{
     const {data,error}=await supabaseClient.auth.signInWithPassword({email,password});
     if(error)throw error;
     await updateAuthUI(data.user);
-    authMessage('লগইন সফল!');
-  }catch(e){authMessage('লগইন ব্যর্থ: '+e.message);}
+    authMessage('Login successful!');
+  }catch(e){authMessage('Login failed: '+e.message);}
   finally{$('loginBtn').disabled=false;}
 }); 
 
 $('signupBtn').addEventListener('click',async()=>{
   const displayName=$('displayName').value.trim(),email=$('email').value.trim(),password=$('password').value;
-  if(!displayName){authMessage('আপনার পূর্ণ নাম লিখুন।');return;}
-  if(!email||password.length<6){authMessage('সঠিক ইমেইল ও ৬+ অক্ষরের পাসওয়ার্ড দিন।');return;}
-  $('signupBtn').disabled=true;authMessage('অ্যাকাউন্ট তৈরি হচ্ছে…');
+  if(!displayName){authMessage('Please enter your full name.');return;}
+  if(!email||password.length<6){authMessage('Enter valid email and 6+ char password.');return;}
+  $('signupBtn').disabled=true;authMessage('Creating account…');
   try{
     const {data,error}=await supabaseClient.auth.signUp({email,password,options:{data:{display_name:displayName}}});
     if(error)throw error;
     if(data.session){
       await updateAuthUI(data.user);
-      authMessage('অ্যাকাউন্ট তৈরি ও লগইন সফল!');
+      authMessage('Account created & logged in successfully!');
     }else{
-      authMessage('অ্যাকাউন্ট তৈরি হয়েছে। ইমেইল কনফার্ম করে লগইন করুন।');
+      authMessage('Account created. Please verify email and log in.');
     }
-  }catch(e){authMessage('সাইনআপ ব্যর্থ: '+e.message);}
+  }catch(e){authMessage('Sign up failed: '+e.message);}
   finally{$('signupBtn').disabled=false;}
 }); 
 
 $('logoutBtn').addEventListener('click',async()=>{
   const {error}=await supabaseClient.auth.signOut();
   if(error){alert(error.message);return;}
-  updateAuthUI(null);authMessage('লগআউট হয়েছেন।');
+  updateAuthUI(null);authMessage('Logged out successfully.');
 }); 
 
 $('publish').addEventListener('click',async()=>{
@@ -503,10 +499,10 @@ $('publish').addEventListener('click',async()=>{
   const fileInput=$('postFile');
   const file=fileInput.files[0];
   
-  if(!content && !file){postMessage('কিছু লিখুন অথবা ছবি/ভিডিও দিন।');return;}
+  if(!content && !file){postMessage('Please write text or upload media.');return;}
   if(!currentUser)return;
   
-  $('publish').disabled=true;postMessage('পোস্ট করা হচ্ছে…');
+  $('publish').disabled=true;postMessage('Publishing post…');
   try{
     let imageUrl=null;
     if(file){
@@ -528,15 +524,16 @@ $('publish').addEventListener('click',async()=>{
     if(error)throw error;
     $('postText').value='';
     fileInput.value='';
-    postMessage('পোস্ট সফল হয়েছে!');
+    postMessage('Post published successfully!');
     await loadPosts();
   }catch(e){
-    postMessage('পোস্ট ব্যর্থ: '+e.message);
+    postMessage('Post failed: '+e.message);
   }finally{
     $('publish').disabled=false;
   }
-});
-  document.addEventListener('click',async e=>{ 
+}); 
+
+document.addEventListener('click',async e=>{ 
   const lb=e.target.closest('[data-like]');
   if(lb){
     const id=lb.dataset.like,existing=(allLikes[id]||[]).find(x=>x.user_id===currentUser.id);
@@ -546,7 +543,7 @@ $('publish').addEventListener('click',async()=>{
       const r=existing?await q.delete().eq('post_id',id).eq('user_id',currentUser.id):await q.insert({post_id:Number(id),user_id:currentUser.id,user_name:memberName(currentUser)});
       if(r.error)throw r.error;
       await loadPosts();
-    }catch(err){alert('লাইক পরিবর্তন করা যায়নি: '+err.message);}
+    }catch(err){alert('Like update failed: '+err.message);}
     finally{lb.disabled=false;}
   } 
 
@@ -560,14 +557,14 @@ $('publish').addEventListener('click',async()=>{
   if(saveBtn){
     const id=saveBtn.dataset.saveEdit;
     const newContent=$(`editText-${id}`).value.trim();
-    if(!newContent){alert('পোস্টের লেখা খালি রাখা যাবে না।');return;}
+    if(!newContent){alert('Post content cannot be empty.');return;}
     saveBtn.disabled=true;
     try{
       const {error}=await supabaseClient.from('posts').update({content:newContent}).eq('id',id).eq('user_id',currentUser.id);
       if(error)throw error;
       editingPostId=null;
       await loadPosts();
-    }catch(err){ alert('পোস্ট এডিট করা যায়নি: '+err.message); saveBtn.disabled=false; }
+    }catch(err){ alert('Post update failed: '+err.message); saveBtn.disabled=false; }
   }
 
   const chatDirectBtn = e.target.closest('[data-start-chat]');
@@ -578,7 +575,7 @@ $('publish').addEventListener('click',async()=>{
     activeDirectUser = { id: friendId, name: friendName };
     $('groupChatTabBtn').className = 'btn light';
     $('privateChatTabBtn').className = 'btn';
-    $('chatTargetName').textContent = 'কথা বলছেন (প্রাইভেট): ' + friendName;
+    $('chatTargetName').textContent = 'Private Chat with: ' + friendName;
     showView('chatView');
   }
 
@@ -589,12 +586,12 @@ $('publish').addEventListener('click',async()=>{
   const share=e.target.closest('[data-share]');
   if(share){
     const p=allPosts.find(x=>String(x.id)===share.dataset.share);
-    if(p){if(navigator.share)navigator.share({title:'স্বজন সমাবেশ',text:p.content}).catch(()=>{});else if(navigator.clipboard)navigator.clipboard.writeText(p.content).then(()=>alert('কপি হয়েছে!')).catch(()=>alert(p.content));else alert(p.content);}
+    if(p){if(navigator.share)navigator.share({title:'স্বজন সমাবেশ',text:p.content}).catch(()=>{});else if(navigator.clipboard)navigator.clipboard.writeText(p.content).then(()=>alert('Copied!')).catch(()=>alert(p.content));else alert(p.content);}
   } 
   const send=e.target.closest('[data-friend]');if(send)await sendFriendRequest(send.dataset.friend,send); 
   const accept=e.target.closest('[data-accept]');if(accept)await handleFriendAction('accept_friend_request',accept.dataset.accept); 
   const reject=e.target.closest('[data-reject]');if(reject)await handleFriendAction('reject_friend_request',reject.dataset.reject); 
-  const remove=e.target.closest('[data-remove-friend]');if(remove&&confirm('এই সদস্যকে Friends List থেকে সরাতে চান?')){const {error}=await supabaseClient.from('friends').delete().or(`user1_id.eq.${currentUser.id},user2_id.eq.${currentUser.id}`).eq('id',remove.dataset.removeFriend);if(error)alert('সরানো যায়নি: '+error.message);else loadSocialData();} 
+  const remove=e.target.closest('[data-remove-friend]');if(remove&&confirm('Remove this member from friends list?')){const {error}=await supabaseClient.from('friends').delete().or(`user1_id.eq.${currentUser.id},user2_id.eq.${currentUser.id}`).eq('id',remove.dataset.removeFriend);if(error)alert('Remove failed: '+error.message);else loadSocialData();} 
 }); 
 
 document.addEventListener('submit',async e=>{
@@ -605,13 +602,13 @@ document.addEventListener('submit',async e=>{
     const {error}=await supabaseClient.from('post_comments').insert({post_id:Number(form.dataset.comment),user_id:currentUser.id,user_name:memberName(currentUser),content});
     if(error)throw error;
     input.value='';await loadPosts();
-  }catch(err){alert('কমেন্ট পাঠানো যায়নি: '+err.message);}
+  }catch(err){alert('Comment send failed: '+err.message);}
   finally{b.disabled=false;}
 }); 
 
 async function loadSocialData(){
   if(!currentUser)return;
-  $('memberSearchStatus').textContent='';$('incomingRequests').innerHTML='লোড হচ্ছে…';$('outgoingRequests').innerHTML='লোড হচ্ছে…';$('friendsList').innerHTML='লোড হচ্ছে…';
+  $('memberSearchStatus').textContent='';$('incomingRequests').innerHTML='Loading…';$('outgoingRequests').innerHTML='Loading…';$('friendsList').innerHTML='Loading…';
   try{ 
     const [incoming,outgoing,friendRows]=await Promise.all([ 
       supabaseClient.from('friend_requests').select('id,requester_id,status,created_at').eq('receiver_id',currentUser.id).eq('status','pending').order('created_at',{ascending:false}), 
@@ -622,15 +619,15 @@ async function loadSocialData(){
     const ids=[...(incoming.data||[]).map(x=>x.requester_id),...(outgoing.data||[]).map(x=>x.receiver_id),...(friendRows.data||[]).map(x=>x.user1_id===currentUser.id?x.user2_id:x.user1_id)]; 
     const profiles=await getProfiles(ids);const map=Object.fromEntries(profiles.map(p=>[p.id,p])); 
     
-    $('incomingRequests').innerHTML=(incoming.data||[]).length?incoming.data.map(r=>`<div class="member"><div class="avatar">${esc((map[r.requester_id]?.full_name||'স').slice(0,1))}</div><div class="grow"><strong>${esc(map[r.requester_id]?.full_name||'সদস্য')}</strong></div><button class="btn" data-accept="${r.id}">Accept</button><button class="btn danger" data-reject="${r.id}">Reject</button></div>`).join():'<div class="empty">কোনো নতুন Request নেই।</div>'; 
-    $('outgoingRequests').innerHTML=(outgoing.data||[]).length?outgoing.data.map(r=>`<div class="member"><div class="avatar">${esc((map[r.receiver_id]?.full_name||'স').slice(0,1))}</div><div class="grow">${esc(map[r.receiver_id]?.full_name||'সদস্য')}<div class="muted">অপেক্ষমাণ</div></div></div>`).join():'<div class="empty">কোনো পাঠানো Request নেই।</div>'; 
+    $('incomingRequests').innerHTML=(incoming.data||[]).length?incoming.data.map(r=>`<div class="member"><div class="avatar">${esc((map[r.requester_id]?.full_name||'স').slice(0,1))}</div><div class="grow"><strong>${esc(map[r.requester_id]?.full_name||'সদস্য')}</strong></div><button class="btn" data-accept="${r.id}">Accept</button><button class="btn danger" data-reject="${r.id}">Reject</button></div>`).join():'<div class="empty">No incoming requests.</div>'; 
+    $('outgoingRequests').innerHTML=(outgoing.data||[]).length?outgoing.data.map(r=>`<div class="member"><div class="avatar">${esc((map[r.receiver_id]?.full_name||'স').slice(0,1))}</div><div class="grow">${esc(map[r.receiver_id]?.full_name||'সদস্য')}<div class="muted">Pending</div></div></div>`).join():'<div class="empty">No sent requests.</div>'; 
     
     $('friendsList').innerHTML=(friendRows.data||[]).length?friendRows.data.map(r=>{
       const id=r.user1_id===currentUser.id?r.user2_id:r.user1_id;
       const fName = map[id]?.full_name||'সদস্য';
       return `<div class="member"><div class="avatar">${esc(fName.slice(0,1))}</div><div class="grow"><strong>${esc(fName)}</strong></div><button class="btn light" data-start-chat="${id}" data-friend-name="${esc(fName)}">💬 Chat</button><button class="btn danger" data-remove-friend="${r.id}">Remove</button></div>`;
-    }).join():'<div class="empty">আপনার Friends List এখনো খালি।</div>'; 
-  }catch(e){console.error(e);$('memberSearchStatus').textContent='Friend তথ্য লোড হয়নি: '+e.message;}
+    }).join():'<div class="empty">Friends list is empty.</div>'; 
+  }catch(e){console.error(e);$('memberSearchStatus').textContent='Social data load failed: '+e.message;}
 } 
 
 async function getProfiles(ids){
@@ -644,12 +641,12 @@ $('memberSearchInput').addEventListener('input',()=>{clearTimeout(memberSearchTi
 
 async function searchMembers(){
   if(!currentUser)return;const q=$('memberSearchInput').value.trim();const root=$('memberResults');
-  if(q.length<2){root.innerHTML='';$('memberSearchStatus').textContent='কমপক্ষে ২ অক্ষরের নাম লিখুন।';return;}
-  $('memberSearchStatus').textContent='খোঁজা হচ্ছে…';
+  if(q.length<2){root.innerHTML='';$('memberSearchStatus').textContent='Type at least 2 characters.';return;}
+  $('memberSearchStatus').textContent='Searching…';
   try{ 
     const {data,error}=await supabaseClient.from('profiles').select('id,full_name,bio').ilike('full_name',`%${q}%`).neq('id',currentUser.id).order('full_name').limit(20);
     if(error)throw error; 
-    if(!data.length){root.innerHTML='<div class="empty">এই নামে কোনো সদস্য পাওয়া যায়নি।</div>';$('memberSearchStatus').textContent='';return;} 
+    if(!data.length){root.innerHTML='<div class="empty">No members found.</div>';$('memberSearchStatus').textContent='';return;} 
     
     const ids=data.map(x=>x.id);
     const [friends,requests]=await Promise.all([
@@ -661,18 +658,17 @@ async function searchMembers(){
     const friendIds=new Set((friends.data||[]).map(x=>x.user1_id===currentUser.id?x.user2_id:x.user1_id));
     const pending=new Set((requests.data||[]).map(x=>x.requester_id===currentUser.id?x.receiver_id:x.requester_id)); 
     
-    root.innerHTML=data.map(p=>`<div class="member"><div class="avatar">${esc((p.full_name||'স').slice(0,1))}</div><div class="grow"><strong>${esc(p.full_name)}</strong><div class="muted">${esc(p.bio||'')}</div></div>${friendIds.has(p.id)?'<span class="muted">বন্ধু</span>':pending.has(p.id)?'<span class="muted">Request pending</span>':`<button class="btn" data-friend="${p.id}">Add Friend</button>`}</div>`).join('');
-    $('memberSearchStatus').textContent=`${data.length} জন সদস্য পাওয়া গেছে।`; 
-  }catch(e){root.innerHTML='';$('memberSearchStatus').textContent='সদস্য খোঁজা যায়নি: '+e.message;}
+    root.innerHTML=data.map(p=>`<div class="member"><div class="avatar">${esc((p.full_name||'স').slice(0,1))}</div><div class="grow"><strong>${esc(p.full_name)}</strong><div class="muted">${esc(p.bio||'')}</div></div>${friendIds.has(p.id)?'<span class="muted">Friend</span>':pending.has(p.id)?'<span class="muted">Pending</span>':`<button class="btn" data-friend="${p.id}">Add Friend</button>`}</div>`).join('');
+    $('memberSearchStatus').textContent=`${data.length} members found.`; 
+  }catch(e){root.innerHTML='';$('memberSearchStatus').textContent='Search failed: '+e.message;}
 } 
-
-async function sendFriendRequest(receiverId,button){
+  async function sendFriendRequest(receiverId,button){
   button.disabled=true;
   try{
     const {error}=await supabaseClient.from('friend_requests').insert({requester_id:currentUser.id,receiver_id:receiverId,status:'pending'});
     if(error)throw error;
-    button.textContent='Request পাঠানো হয়েছে';button.disabled=true;await loadSocialData();
-  }catch(e){alert('Friend Request পাঠানো যায়নি: '+e.message);button.disabled=false;}
+    button.textContent='Request Sent';button.disabled=true;await loadSocialData();
+  }catch(e){alert('Friend request failed: '+e.message);button.disabled=false;}
 } 
 
 async function handleFriendAction(fn,id){
@@ -680,11 +676,11 @@ async function handleFriendAction(fn,id){
     const {error}=await supabaseClient.rpc(fn,{request_id:id});
     if(error)throw error;
     await loadSocialData();
-  }catch(e){alert('অনুরোধটি সম্পন্ন হয়নি: '+e.message);}
+  }catch(e){alert('Action failed: '+e.message);}
 } 
 
 $('searchInput').addEventListener('input',doSearch);
-document.querySelectorAll('.nav button').forEach(b=>b.addEventListener('click',()=>{if(!currentUser){authMessage('আগে লগইন করুন।');return;}showView(b.dataset.view);})); 
+document.querySelectorAll('.nav button').forEach(b=>b.addEventListener('click',()=>{if(!currentUser){authMessage('Please login first.');return;}showView(b.dataset.view);})); 
 
 document.addEventListener('visibilitychange',()=>{if(!document.hidden&&currentUser)loadPosts();}); 
 
@@ -695,7 +691,7 @@ document.addEventListener('visibilitychange',()=>{if(!document.hidden&&currentUs
   }catch(err){console.error("Session error:", err);}
   
   supabaseClient.auth.onAuthStateChange((event,session)=>{
-    if(event==='SIGNED_OUT') updateAuthUI(null);
+    .if(event==='SIGNED_OUT') updateAuthUI(null);
     else if(session?.user && !currentUser) setTimeout(()=>updateAuthUI(session.user),0);
   });
 })(); 

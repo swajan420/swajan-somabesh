@@ -383,12 +383,14 @@ async function loadMessages(){
       $('chatBox').innerHTML = '<div class="empty">কোনো মেসেজ নেই। নতুন কথোপকথন শুরু করুন!</div>';
       return;
     }
-    
-    $('chatBox').innerHTML = data.map(m => {
-      const isMe = m.sender_id === currentUser.id;
+
+  $('chatBox').innerHTML = data.map(m => {
+      const isMe = (currentUser && m.sender_id === currentUser.id);
       return `<div class="msg ${isMe ? 'me' : 'them'}">${esc(m.content)}</div>`;
     }).join('');
-    $('chatBox').scrollTop = $('chatBox').scrollHeight;
+    
+
+  $('chatBox').scrollTop = $('chatBox').scrollHeight;
   } catch(e) {
     console.error("Chat load error:", e);
   }

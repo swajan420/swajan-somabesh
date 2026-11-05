@@ -9,10 +9,10 @@
 <style> 
 :root{--green:#145c46;--mint:#e4f2eb;--bg:#f3f6f4;--ink:#1c2923;--muted:#68766f;--line:#e1e8e3} 
 *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:16px system-ui,-apple-system,"Noto Sans Bengali",sans-serif} 
-header{background:var(--green);color:white;padding:18px 16px;position:sticky;top:0;z-index:2;box-shadow:0 2px 8px #0001} 
+header{background:var(--green);color:white;padding:16px;position:sticky;top:0;z-index:2;box-shadow:0 2px 8px #0002} 
 .head{max-width:760px;margin:auto;display:flex;align-items:center;gap:12px}.logo{width:44px;height:44px;border-radius:14px;background:#ffffff24;display:grid;place-items:center;font-size:25px}.brand{font-weight:800;font-size:20px}.tag{font-size:12px;color:#d4f0e4} 
 .wrap{max-width:760px;margin:16px auto;padding:0 12px 100px}.card{background:white;border:1px solid var(--line);border-radius:17px;padding:15px;margin-bottom:13px;box-shadow:0 2px 8px #183a2910} 
-.row{display:flex;align-items:center;gap:10px}.grow{flex:1;min-width:0}.avatar{width:40px;height:40px;border-radius:50%;background:var(--mint);color:var(--green);display:grid;place-items:center;font-weight:800;flex-shrink:0} 
+.row{display:flex;align-items:center;gap:10px}.grow{flex:1;min-width:0}.avatar{width:42px;height:42px;border-radius:50%;background:var(--mint);color:var(--green);display:grid;place-items:center;font-weight:800;flex-shrink:0;background-size:cover;background-position:center} 
 h1,h2,p{margin:0}h2{font-size:17px}.muted{color:var(--muted);font-size:13px} 
 textarea{width:100%;border:1px solid var(--line);border-radius:12px;outline:0;resize:vertical;min-height:82px;font:inherit;padding:12px} 
 input,button{font:inherit}input[type=text],input[type=email],input[type=password],input[type=file]{width:100%;border:1px solid var(--line);border-radius:12px;padding:11px;background:#fff;margin:5px 0} 
@@ -23,8 +23,12 @@ input,button{font:inherit}input[type=text],input[type=email],input[type=password
 .commentbox{display:flex;gap:8px;margin-top:10px}.commentbox input{flex:1;min-width:0}.comments{margin-top:10px;font-size:14px}.comment{background:#f6f8f7;border-radius:10px;padding:8px 10px;margin-top:6px} 
 .notice{font-size:12px;color:var(--muted);line-height:1.5}.empty{text-align:center;padding:25px;color:var(--muted)}.hidden{display:none!important}.status{font-size:13px;margin-top:8px;color:var(--muted)} 
 .nav{position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:1px solid var(--line);display:flex;justify-content:center;gap:4px;padding:9px 4px calc(9px + env(safe-area-inset-bottom));z-index:3} 
-.nav button{background:white;border:0;color:var(--muted);padding:8px 9px;border-radius:12px;cursor:pointer;font-size:14px}.nav button.active{background:var(--mint);color:var(--green);font-weight:800} 
+.nav button{background:white;border:0;color:var(--muted);padding:8px 6px;border-radius:12px;cursor:pointer;font-size:13px}.nav button.active{background:var(--mint);color:var(--green);font-weight:800} 
 .member{display:flex;align-items:center;gap:10px;padding:11px 0;border-bottom:1px solid var(--line)}.member:last-child{border-bottom:0} 
+.chat-box{height:300px;overflow-y:auto;border:1px solid var(--line);border-radius:12px;padding:10px;background:#fafbfc;display:flex;flex-direction:column;gap:8px}
+.msg{max-width:75%;padding:8px 12px;border-radius:14px;font-size:14px;line-height:1.4}
+.msg.me{align-self:flex-end;background:var(--green);color:white;border-bottom-right-radius:2px}
+.msg.them{align-self:flex-start;background:#e8ece9;color:var(--ink);border-bottom-left-radius:2px}
 @media(min-width:600px){.wrap{margin-top:22px}.card{padding:18px}} 
 </style> 
 </head> 
@@ -39,15 +43,31 @@ input,button{font:inherit}input[type=text],input[type=email],input[type=password
 </section> 
 
 <section id="feedView" class="hidden"> 
-<div class="card"><div class="row"><div class="avatar">স</div><div class="grow"><h2>আপনার নিউজ ফিড</h2><div class="muted">সদস্যদের সবার পোস্ট এখানে দেখা যাবে</div></div><button class="btn light" id="logoutBtn">লগআউট</button></div><div id="signedInAs" class="status"></div></div> 
+<div class="card"><div class="row"><div class="avatar" id="headerAvatar">স</div><div class="grow"><h2>আপনার নিউজ ফিড</h2><div class="muted">সদস্যদের সবার পোস্ট এখানে দেখা যাবে</div></div><button class="btn light" id="logoutBtn">লগআউট</button></div><div id="signedInAs" class="status"></div></div> 
 <div class="card">
   <textarea id="postText" maxlength="5000" placeholder="আপনার মনে কী আছে? লিখুন..."></textarea>
   <input type="file" id="postFile" accept="image/*,video/*" style="margin-top:10px;">
-  <div class="tools"><span class="muted">🌿 ছবি বা ভিডিওসহ সম্মানজনক পোস্ট করুন</span><button class="btn" id="publish">পোস্ট করুন</button></div>
+  <div class="tools"><span class="muted">🌿 ছবি বা ভিডিওসহ পোস্ট করুন</span><button class="btn" id="publish">পোস্ট করুন</button></div>
   <div id="postStatus" class="status"></div>
 </div>
 <div id="posts"></div> 
 </section> 
+
+<section id="chatView" class="hidden">
+  <div class="card">
+    <h2>💬 আড্ডা ও চ্যাটিং</h2>
+    <div style="display:flex; gap:8px; margin:10px 0;">
+      <button class="btn" id="groupChatTabBtn">👥 গ্রুপ চ্যাট</button>
+      <button class="btn light" id="privateChatTabBtn">👤 প্রাইভেট চ্যাট</button>
+    </div>
+    <div id="chatTargetName" class="muted" style="margin-bottom:8px;">সবাই যুক্ত আছেন সাধারণ গ্রুপে</div>
+    <div class="chat-box" id="chatBox"><div class="empty">মেসেজ লোড হচ্ছে...</div></div>
+    <div style="display:flex; gap:8px; margin-top:10px;">
+      <input type="text" id="chatInput" placeholder="মেসেজ লিখুন..." style="margin:0;">
+      <button class="btn" id="sendMsgBtn">পাঠান</button>
+    </div>
+  </div>
+</section>
 
 <section id="searchView" class="hidden"><div class="card"><h2 style="margin-bottom:10px">পোস্ট খুঁজুন</h2><input id="searchInput" type="text" placeholder="পোস্টের লেখা দিয়ে খুঁজুন..."></div><div id="searchResults"></div></section> 
 
@@ -59,13 +79,35 @@ input,button{font:inherit}input[type=text],input[type=email],input[type=password
 </section> 
 
 <section id="profileView" class="hidden"> 
-<div class="card"><div class="row"><div class="avatar" style="width:58px;height:58px;font-size:23px" id="profileAvatar">স</div><div class="grow"><h2>আপনার প্রোফাইল</h2><div class="muted" id="profileEmail">লগইন করলে এখানে তথ্য দেখাবে</div></div></div> 
-<label class="muted" for="profileName">আপনার পূর্ণ নাম</label><input id="profileName" type="text" maxlength="60" placeholder="আপনার নাম"><label class="muted" for="profileBio">পরিচিতি (Bio)</label><textarea id="profileBio" maxlength="300" placeholder="নিজের সম্পর্কে সংক্ষেপে লিখুন..."></textarea><div class="tools"><span class="notice">আপনার নাম ও Bio অন্য সদস্যরা দেখতে পারবেন। ইমেইল ব্যক্তিগত থাকবে।</span><button class="btn" id="saveProfileBtn">প্রোফাইল সংরক্ষণ</button></div><div id="profileStatus" class="status"></div></div> 
+<div class="card">
+  <div class="row">
+    <div class="avatar" style="width:65px;height:65px;font-size:24px" id="profileAvatar">স</div>
+    <div class="grow">
+      <h2>আপনার প্রোফাইল</h2>
+      <div class="muted" id="profileEmail">ইমেইল সংগৃহীত</div>
+    </div>
+  </div> 
+  <label class="muted" style="margin-top:10px; display:block;">প্রোফাইল ছবি পরিবর্তন করুন</label>
+  <input type="file" id="avatarFile" accept="image/*">
+  <label class="muted" for="profileName">আপনার পূর্ণ নাম</label>
+  <input id="profileName" type="text" maxlength="60" placeholder="আপনার নাম">
+  <label class="muted" for="profileBio">পরিচিতি (Bio)</label>
+  <textarea id="profileBio" maxlength="300" placeholder="নিজের সম্পর্কে সংক্ষেপে লিখুন..."></textarea>
+  <div class="tools">
+    <span class="notice">আপনার প্রোফাইল তথ্য অন্য সদস্যরা দেখতে পাবেন।</span>
+    <button class="btn" id="saveProfileBtn">প্রোফাইল সংরক্ষণ</button>
+  </div>
+  <div id="profileStatus" class="status"></div>
+</div> 
 </section> 
 </main> 
 
 <nav class="nav"> 
-<button class="active" data-view="feedView">🏠 হোম</button><button data-view="searchView">🔎 পোস্ট</button><button data-view="membersView">👥 সদস্য</button><button data-view="profileView">👤 প্রোফাইল</button> 
+<button class="active" data-view="feedView">🏠 হোম</button>
+<button data-view="chatView">💬 চ্যাট</button>
+<button data-view="searchView">🔎 খুঁজুন</button>
+<button data-view="membersView">👥 সদস্য</button>
+<button data-view="profileView">👤 প্রোফাইল</button> 
 </nav> 
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script> 
@@ -74,15 +116,36 @@ const SUPABASE_URL='https://bfbgzbpogeilcffrhqru.supabase.co';
 const SUPABASE_PUBLISHABLE_KEY='sb_publishable_XoCQ72fZftVkdXfUBqP8OA_j7n21Gv9'; 
 const supabaseClient=window.supabase.createClient(SUPABASE_URL,SUPABASE_PUBLISHABLE_KEY); 
 let currentUser=null,allPosts=[],allLikes={},allComments={},openLikers=new Set(),myProfile=null,editingPostId=null; 
+let activeChatMode='group', activeDirectUser=null, chatInterval=null;
+
 const $=id=>document.getElementById(id); 
 function esc(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));} 
 function authMessage(s){$('authStatus').textContent=s}function postMessage(s){$('postStatus').textContent=s} 
 function memberName(user){return myProfile?.full_name||user?.user_metadata?.display_name||'সদস্য';} 
-function showView(id){['feedView','searchView','membersView','profileView'].forEach(v=>$(v).classList.toggle('hidden',v!==id));document.querySelectorAll('[data-view]').forEach(b=>b.classList.toggle('active',b.dataset.view===id));if(id==='searchView')doSearch();if(id==='feedView')loadPosts();if(id==='membersView')loadSocialData();if(id==='profileView')loadProfile();} 
+
+function renderAvatar(el, profile){
+  if(profile?.avatar_url){
+    el.style.backgroundImage=`url('${profile.avatar_url}')`;
+    el.textContent='';
+  } else {
+    el.style.backgroundImage='none';
+    el.textContent=(profile?.full_name||'স').slice(0,1);
+  }
+}
+
+function showView(id){
+  ['feedView','chatView','searchView','membersView','profileView'].forEach(v=>$(v).classList.toggle('hidden',v!==id));
+  document.querySelectorAll('[data-view]').forEach(b=>b.classList.toggle('active',b.dataset.view===id));
+  if(id==='searchView')doSearch();
+  if(id==='feedView')loadPosts();
+  if(id==='membersView')loadSocialData();
+  if(id==='profileView')loadProfile();
+  if(id==='chatView')initChatView();
+} 
 
 async function ensureProfile(user){ 
   try {
-    const {data,error}=await supabaseClient.from('profiles').select('id,full_name,avatar_url,bio').eq('id',user.id).maybeSingle(); 
+    const {data}=await supabaseClient.from('profiles').select('id,full_name,avatar_url,bio').eq('id',user.id).maybeSingle(); 
     if(data){myProfile=data;return data;} 
     const name=(user.user_metadata?.display_name||user.email?.split('@')[0]||'সদস্য').trim(); 
     const result=await supabaseClient.from('profiles').upsert({id:user.id,full_name:name}).select().single(); 
@@ -96,8 +159,13 @@ async function ensureProfile(user){
 
 async function loadProfile(){ 
   if(!currentUser)return; 
-  try{if(!myProfile)await ensureProfile(currentUser);$('profileName').value=myProfile.full_name||'';$('profileBio').value=myProfile.bio||'';$('profileEmail').textContent='ইমেইল ব্যক্তিগত · '+currentUser.email;$('profileAvatar').textContent=(myProfile.full_name||'স').slice(0,1);} 
-  catch(e){$('profileStatus').textContent='প্রোফাইল লোড হয়নি: '+e.message;} 
+  try{
+    if(!myProfile)await ensureProfile(currentUser);
+    $('profileName').value=myProfile.full_name||'';
+    $('profileBio').value=myProfile.bio||'';
+    $('profileEmail').textContent='ইমেইল ব্যক্তিগত · '+currentUser.email;
+    renderAvatar($('profileAvatar'), myProfile);
+  }catch(e){$('profileStatus').textContent='প্রোফাইল লোড হয়নি: '+e.message;} 
 } 
 
 function drawPosts(items,target='posts'){ 
@@ -114,8 +182,7 @@ function drawPosts(items,target='posts'){
         mediaHtml = `<img src="${esc(p.image_url)}" style="width:100%; border-radius:12px; margin-top:10px; max-height:450px; object-fit:cover;" alt="Post image">`;
       }
     }
-
-    let editSection = '';
+      let editSection = '';
     if(editingPostId===id){
       editSection = `<div style="margin-top:10px;">
         <textarea id="editText-${id}" style="width:100%; min-height:60px;" maxlength="5000">${esc(p.content)}</textarea>
@@ -126,7 +193,7 @@ function drawPosts(items,target='posts'){
       </div>`;
     }
 
-    return `<article class="card" id="post-card-${id}">
+    return `<article class="card">
       <div class="row">
         <div class="avatar">${esc((p.author||'স').slice(0,1))}</div>
         <div class="grow">
@@ -179,7 +246,8 @@ async function loadPosts(){
     drawPosts(allPosts);doSearch();postMessage(allPosts.length?'':'এখনো কোনো পোস্ট নেই।'); 
   }catch(e){console.error(e);postMessage('ডাটা লোড সমস্যা: '+e.message);} 
 } 
-  function doSearch(){
+
+function doSearch(){
   if(!currentUser)return;
   const q=($('searchInput').value||'').trim().toLowerCase();
   drawPosts(!q?allPosts:allPosts.filter(p=>(p.content||'').toLowerCase().includes(q)||(p.author||'').toLowerCase().includes(q)),'searchResults');
@@ -193,15 +261,121 @@ async function updateAuthUI(user){
     try{
       await ensureProfile(user);
       $('signedInAs').textContent='লগইন করেছেন: '+memberName(user);
-      $('profileEmail').textContent='ইমেইল ব্যক্তিগত · '+user.email;
+      renderAvatar($('headerAvatar'), myProfile);
       showView('feedView');
     }catch(e){authMessage('প্রোফাইল প্রস্তুত করা যায়নি: '+e.message);}
   }else{
     myProfile=null;
     $('authCard').classList.remove('hidden');
-    ['feedView','searchView','membersView','profileView'].forEach(v=>$(v).classList.add('hidden'));
+    ['feedView','chatView','searchView','membersView','profileView'].forEach(v=>$(v).classList.add('hidden'));
   }
 } 
+
+function initChatView(){
+  if(chatInterval) clearInterval(chatInterval);
+  loadMessages();
+  chatInterval = setInterval(loadMessages, 3000);
+}
+
+async function loadMessages(){
+  if(!currentUser) return;
+  try {
+    let q = supabaseClient.from('messages').select('*').order('created_at', {ascending: true});
+    if(activeChatMode==='group'){
+      q = q.eq('group_id', 'general_group');
+    } else if(activeDirectUser) {
+      q = q.or(`and(sender_id.eq.${currentUser.id},receiver_id.eq.${activeDirectUser.id}),and(sender_id.eq.${activeDirectUser.id},receiver_id.eq.${currentUser.id})`);
+    } else {
+      $('chatBox').innerHTML = '<div class="empty">কাউকে নির্বাচন করে প্রাইভেট চ্যাট শুরু করুন।</div>';
+      return;
+    }
+    const {data, error} = await q.limit(100);
+    if(error) throw error;
+    
+    if(!data.length){
+      $('chatBox').innerHTML = '<div class="empty">কোনো মেসেজ নেই। নতুন কথোপকথন শুরু করুন!</div>';
+      return;
+    }
+    
+    $('chatBox').innerHTML = data.map(m => {
+      const isMe = m.sender_id === currentUser.id;
+      return `<div class="msg ${isMe ? 'me' : 'them'}">${esc(m.content)}</div>`;
+    }).join('');
+    $('chatBox').scrollTop = $('chatBox').scrollHeight;
+  } catch(e) {
+    console.error("Chat load error:", e);
+  }
+}
+
+$('sendMsgBtn').addEventListener('click', async () => {
+  const text = $('chatInput').value.trim();
+  if(!text || !currentUser) return;
+  $('chatInput').value = '';
+  try {
+    const payload = {
+      sender_id: currentUser.id,
+      content: text
+    };
+    if(activeChatMode === 'group') payload.group_id = 'general_group';
+    else if(activeDirectUser) payload.receiver_id = activeDirectUser.id;
+    else return;
+
+    const {error} = await supabaseClient.from('messages').insert(payload);
+    if(error) throw error;
+    await loadMessages();
+  } catch(e) {
+    alert("মেসেজ পাঠানো যায়নি: " + e.message);
+  }
+});
+
+$('groupChatTabBtn').addEventListener('click', () => {
+  activeChatMode = 'group';
+  activeDirectUser = null;
+  $('groupChatTabBtn').className = 'btn';
+  $('privateChatTabBtn').className = 'btn light';
+  $('chatTargetName').textContent = 'সবাই যুক্ত আছেন সাধারণ গ্রুপে';
+  loadMessages();
+});
+
+$('privateChatTabBtn').addEventListener('click', () => {
+  showView('membersView');
+  alert("আপনার ফ্রেন্ডস লিস্ট থেকে যার সাথে কথা বলতে চান তার নামের পাশে 'Chat' বাটনে ক্লিক করুন।");
+});
+
+$('saveProfileBtn').addEventListener('click',async()=>{
+  const full_name=$('profileName').value.trim(),bio=$('profileBio').value.trim();
+  const avatarFile=$('avatarFile').files[0];
+  if(!full_name){$('profileStatus').textContent='পূর্ণ নাম লিখুন।';return;}
+  $('saveProfileBtn').disabled=true;
+  $('profileStatus').textContent='সংরক্ষণ হচ্ছে…';
+  try{
+    let avatarUrl = myProfile?.avatar_url || null;
+    if(avatarFile){
+      const fileExt = avatarFile.name.split('.').pop();
+      const filePath = `avatars/${currentUser.id}_${Date.now()}.${fileExt}`;
+      const {error: upErr} = await supabaseClient.storage.from('swajan-media').upload(filePath, avatarFile);
+      if(upErr) throw upErr;
+      const {data: pubData} = supabaseClient.storage.from('swajan-media').getPublicUrl(filePath);
+      avatarUrl = pubData.publicUrl;
+    }
+
+    const {data,error}=await supabaseClient.from('profiles').upsert({
+      id:currentUser.id,
+      full_name,
+      bio,
+      avatar_url: avatarUrl,
+      updated_at:new Date().toISOString()
+    }).select().single();
+
+    if(error)throw error;
+    myProfile=data;
+    $('signedInAs').textContent='লগইন করেছেন: '+full_name;
+    renderAvatar($('headerAvatar'), myProfile);
+    renderAvatar($('profileAvatar'), myProfile);
+    $('profileStatus').textContent='প্রোফাইল চমৎকারভাবে সংরক্ষিত হয়েছে!';
+  }catch(e){$('profileStatus').textContent='সংরক্ষণ হয়নি: '+e.message;}
+  finally{$('saveProfileBtn').disabled=false;}
+}); 
 
 $('loginBtn').addEventListener('click',async()=>{
   const email=$('email').value.trim(),password=$('password').value;
@@ -296,21 +470,12 @@ document.addEventListener('click',async e=>{
     finally{lb.disabled=false;}
   } 
 
-  // এডিট শুরু করার বাটন
   const editBtn=e.target.closest('[data-edit-post]');
-  if(editBtn){
-    editingPostId=editBtn.dataset.editPost;
-    drawPosts(allPosts);
-  }
+  if(editBtn){ editingPostId=editBtn.dataset.editPost; drawPosts(allPosts); }
 
-  // এডিট বাতিল করার বাটন
   const cancelBtn=e.target.closest('[data-cancel-edit]');
-  if(cancelBtn){
-    editingPostId=null;
-    drawPosts(allPosts);
-  }
+  if(cancelBtn){ editingPostId=null; drawPosts(allPosts); }
 
-  // এডিট সংরক্ষণ করার বাটন
   const saveBtn=e.target.closest('[data-save-edit]');
   if(saveBtn){
     const id=saveBtn.dataset.saveEdit;
@@ -322,10 +487,19 @@ document.addEventListener('click',async e=>{
       if(error)throw error;
       editingPostId=null;
       await loadPosts();
-    }catch(err){
-      alert('পোস্ট এডিট করা যায়নি: '+err.message);
-      saveBtn.disabled=false;
-    }
+    }catch(err){ alert('পোস্ট এডিট করা যায়নি: '+err.message); saveBtn.disabled=false; }
+  }
+
+  const chatDirectBtn = e.target.closest('[data-start-chat]');
+  if(chatDirectBtn){
+    const friendId = chatDirectBtn.dataset.startChat;
+    const friendName = chatDirectBtn.dataset.friendName;
+    activeChatMode = 'direct';
+    activeDirectUser = { id: friendId, name: friendName };
+    $('groupChatTabBtn').className = 'btn light';
+    $('privateChatTabBtn').className = 'btn';
+    $('chatTargetName').textContent = 'কথা বলছেন: ' + friendName;
+    showView('chatView');
   }
 
   const names=e.target.closest('[data-likers]');
@@ -352,7 +526,8 @@ document.addEventListener('submit',async e=>{
     if(error)throw error;
     input.value='';await loadPosts();
   }catch(err){alert('কমেন্ট পাঠানো যায়নি: '+err.message);}
-  finally{b.disabled=false;}}); 
+  finally{b.disabled=false;}
+}); 
 
 async function loadSocialData(){
   if(!currentUser)return;
@@ -369,11 +544,15 @@ async function loadSocialData(){
     
     $('incomingRequests').innerHTML=(incoming.data||[]).length?incoming.data.map(r=>`<div class="member"><div class="avatar">${esc((map[r.requester_id]?.full_name||'স').slice(0,1))}</div><div class="grow"><strong>${esc(map[r.requester_id]?.full_name||'সদস্য')}</strong></div><button class="btn" data-accept="${r.id}">Accept</button><button class="btn danger" data-reject="${r.id}">Reject</button></div>`).join():'<div class="empty">কোনো নতুন Request নেই।</div>'; 
     $('outgoingRequests').innerHTML=(outgoing.data||[]).length?outgoing.data.map(r=>`<div class="member"><div class="avatar">${esc((map[r.receiver_id]?.full_name||'স').slice(0,1))}</div><div class="grow">${esc(map[r.receiver_id]?.full_name||'সদস্য')}<div class="muted">অপেক্ষমাণ</div></div></div>`).join():'<div class="empty">কোনো পাঠানো Request নেই।</div>'; 
-    $('friendsList').innerHTML=(friendRows.data||[]).length?friendRows.data.map(r=>{const id=r.user1_id===currentUser.id?r.user2_id:r.user1_id;return `<div class="member"><div class="avatar">${esc((map[id]?.full_name||'স').slice(0,1))}</div><div class="grow"><strong>${esc(map[id]?.full_name||'সদস্য')}</strong></div><button class="btn danger" data-remove-friend="${r.id}">Remove</button></div>`;}).join():'<div class="empty">আপনার Friends List এখনো খালি।</div>'; 
+    
+    $('friendsList').innerHTML=(friendRows.data||[]).length?friendRows.data.map(r=>{
+      const id=r.user1_id===currentUser.id?r.user2_id:r.user1_id;
+      const fName = map[id]?.full_name||'সদস্য';
+      return `<div class="member"><div class="avatar">${esc(fName.slice(0,1))}</div><div class="grow"><strong>${esc(fName)}</strong></div><button class="btn light" data-start-chat="${id}" data-friend-name="${esc(fName)}">💬 Chat</button><button class="btn danger" data-remove-friend="${r.id}">Remove</button></div>`;
+    }).join():'<div class="empty">আপনার Friends List এখনো খালি।</div>'; 
   }catch(e){console.error(e);$('memberSearchStatus').textContent='Friend তথ্য লোড হয়নি: '+e.message;}
 } 
-
-async function getProfiles(ids){
+  async function getProfiles(ids){
   const unique=[...new Set(ids.filter(Boolean))];if(!unique.length)return[];
   const {data,error}=await supabaseClient.from('profiles').select('id,full_name,avatar_url,bio').in('id',unique);
   if(error)throw error;return data||[];
@@ -422,18 +601,6 @@ async function handleFriendAction(fn,id){
     await loadSocialData();
   }catch(e){alert('অনুরোধটি সম্পন্ন হয়নি: '+e.message);}
 } 
-
-$('saveProfileBtn').addEventListener('click',async()=>{
-  const full_name=$('profileName').value.trim(),bio=$('profileBio').value.trim();
-  if(!full_name){$('profileStatus').textContent='পূর্ণ নাম লিখুন। ঠিক আছে।';return;}
-  $('saveProfileBtn').disabled=true;
-  try{
-    const {data,error}=await supabaseClient.from('profiles').upsert({id:currentUser.id,full_name,bio,updated_at:new Date().toISOString()}).select().single();
-    if(error)throw error;
-    myProfile=data;$('signedInAs').textContent='লগইন করেছেন: '+full_name;$('profileAvatar').textContent=full_name.slice(0,1);$('profileStatus').textContent='প্রোফাইল সংরক্ষণ করা হয়েছে।';
-  }catch(e){$('profileStatus').textContent='সংরক্ষণ হয়নি: '+e.message;}
-  finally{$('saveProfileBtn').disabled=false;}
-}); 
 
 $('searchInput').addEventListener('input',doSearch);
 document.querySelectorAll('.nav button').forEach(b=>b.addEventListener('click',()=>{if(!currentUser){authMessage('আগে লগইন করুন।');return;}showView(b.dataset.view);})); 

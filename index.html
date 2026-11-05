@@ -187,7 +187,6 @@ async function loadProfile(){
     renderAvatar($('profileAvatar'), myProfile);
   }catch(e){$('profileStatus').textContent='Profile load failed: '+e.message;} 
 } 
-
 function drawPosts(items,target='posts'){ 
   const root=$(target);if(!items.length){root.innerHTML='<div class="card empty">No posts yet. Be the first to publish!</div>';return;} 
   root.innerHTML=items.map(p=>{
@@ -244,7 +243,8 @@ function drawPosts(items,target='posts'){
     </article>`;
   }).join(''); 
 } 
-                                                                                                           async function loadPosts(){ 
+
+async function loadPosts(){ 
   if(!currentUser)return;postMessage('Loading posts…'); 
   try{
     const {data,error}=await supabaseClient.from('posts').select('*').order('created_at',{ascending:false}).limit(50);
@@ -456,7 +456,7 @@ $('saveProfileBtn').addEventListener('click',async()=>{
   }catch(e){$('profileStatus').textContent='Save failed: '+e.message;}
   finally{$('saveProfileBtn').disabled=false;}
 }); 
-
+  
 $('loginBtn').addEventListener('click',async()=>{
   const email=$('email').value.trim(),password=$('password').value;
   if(!email||!password){authMessage('Please enter email and password.');return;}
@@ -662,7 +662,8 @@ async function searchMembers(){
     $('memberSearchStatus').textContent=`${data.length} members found.`; 
   }catch(e){root.innerHTML='';$('memberSearchStatus').textContent='Search failed: '+e.message;}
 } 
-  async function sendFriendRequest(receiverId,button){
+
+async function sendFriendRequest(receiverId,button){
   button.disabled=true;
   try{
     const {error}=await supabaseClient.from('friend_requests').insert({requester_id:currentUser.id,receiver_id:receiverId,status:'pending'});
@@ -700,3 +701,4 @@ if('serviceWorker'in navigator)navigator.serviceWorker.register('./sw.js').catch
 </script> 
 </body> 
 </html>
+  

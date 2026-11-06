@@ -26,9 +26,11 @@ input,button{font:inherit}input[type=text],input[type=email],input[type=password
 .nav button{background:white;border:0;color:var(--muted);padding:8px 6px;border-radius:12px;cursor:pointer;font-size:13px}.nav button.active{background:var(--mint);color:var(--green);font-weight:800} 
 .member{display:flex;align-items:center;gap:10px;padding:11px 0;border-bottom:1px solid var(--line)}.member:last-child{border-bottom:0} 
 .chat-box{height:250px;overflow-y:auto;border:1px solid var(--line);border-radius:12px;padding:10px;background:#fafbfc;display:flex;flex-direction:column;gap:8px}
-.msg{max-width:75%;padding:8px 12px;border-radius:14px;font-size:14px;line-height:1.4}
+.msg{max-width:75%;padding:8px 12px;border-radius:14px;font-size:14px;line-height:1.4;position:relative}
 .msg.me{align-self:flex-end;background:var(--green);color:white;border-bottom-right-radius:2px}
 .msg.them{align-self:flex-start;background:#e8ece9;color:var(--ink);border-bottom-left-radius:2px}
+.msg-actions{font-size:11px;margin-top:4px;display:flex;gap:8px;opacity:0.8}
+.msg-actions button{background:none;border:0;color:inherit;cursor:pointer;padding:0;font:inherit;font-size:11px;text-decoration:underline}
 @media(min-width:600px){.wrap{margin-top:22px}.card{padding:18px}} 
 </style> 
 </head> 
@@ -137,11 +139,29 @@ const supabaseClient=window.supabase.createClient(SUPABASE_URL,SUPABASE_PUBLISHA
 let currentUser=null,allPosts=[],allLikes={},allComments={},openLikers=new Set(),myProfile=null,editingPostId=null; 
 let activeChatMode='group', activeDirectUser=null, chatInterval=null;
 let peer=null, localStream=null, currentCall=null;
+let lastMessageCount = 0;
 
 const $=id=>document.getElementById(id); 
 function esc(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));} 
 function authMessage(s){$('authStatus').textContent=s}function postMessage(s){$('postStatus').textContent=s} 
 function memberName(user){return myProfile?.full_name||user?.user_metadata?.display_name||'সদস্য';} 
+
+// Notification Sound (Web Audio API)
+function playNotificationSound() {
+  try {
+    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(587.33, audioCtx.currentTime); // D5
+    gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.00001, audioCtx.currentTime + 0.3);
+    osc.connect(gain);
+    gain.connect(audioCtx.destination);
+    osc.start();
+    osc.stop(audioCtx.currentTime + 0.3);
+  } catch(e) { console.error(e); }
+}
 
 function renderAvatar(el, profile){
   if(profile?.avatar_url){
@@ -187,6 +207,7 @@ async function loadProfile(){
     renderAvatar($('profileAvatar'), myProfile);
   }catch(e){$('profileStatus').textContent='Profile load failed: '+e.message;} 
 } 
+
 function drawPosts(items,target='posts'){ 
   const root=$(target);if(!items.length){root.innerHTML='<div class="card empty">No posts yet. Be the first to publish!</div>';return;} 
   root.innerHTML=items.map(p=>{
@@ -244,7 +265,7 @@ function drawPosts(items,target='posts'){
   }).join(''); 
 } 
 
-async function loadPosts(){ 
+  async function loadPosts(){ 
   if(!currentUser)return;postMessage('Loading posts…'); 
   try{
     const {data,error}=await supabaseClient.from('posts').select('*').order('created_at',{ascending:false}).limit(50);
@@ -377,6 +398,14 @@ async function loadMessages(){
     const {data, error} = await q.limit(100);
     if(error) throw error;
     
+    if(data.length > lastMessageCount && lastMessageCount !== 0) {
+      const latestMsg = data[data.length - 1];
+      if(latestMsg.sender_id !== currentUser.id) {
+        playNotificationSound();
+      }
+    }
+    lastMessageCount = data.length;
+
     if(!data.length){
       $('chatBox').innerHTML = '<div class="empty">No messages yet. Start conversation!</div>';
       return;
@@ -384,7 +413,17 @@ async function loadMessages(){
     
     $('chatBox').innerHTML = data.map(m => {
       const isMe = (currentUser && m.sender_id === currentUser.id);
-      return `<div class="msg ${isMe ? 'me' : 'them'}">${esc(m.content)}</div>`;
+      let actionsHtml = '';
+      if(isMe) {
+        actionsHtml = `<div class="msg-actions">
+          <button data-edit-msg="${m.id}">Edit</button>
+          <button data-delete-msg="${m.id}">Delete</button>
+        </div>`;
+      }
+      return `<div class="msg ${isMe ? 'me' : 'them'}" id="msg-card-${m.id}">
+        <div class="msg-text">${esc(m.content)}</div>
+        ${actionsHtml}
+      </div>`;
     }).join('');
     $('chatBox').scrollTop = $('chatBox').scrollHeight;
   } catch(e) {
@@ -410,6 +449,60 @@ $('sendMsgBtn').addEventListener('click', async () => {
   }
 });
 
+// Edit & Delete Message Event Handlers
+document.addEventListener('click', async e => {
+  const editBtn = e.target.closest('[data-edit-msg]');
+  if(editBtn) {
+    const msgId = editBtn.dataset.editMsg;
+    const card = $(`msg-card-${msgId}`);
+    const textEl = card.querySelector('.msg-text');
+    const currentText = textEl.textContent;
+    
+    card.innerHTML = `
+      <div style="display:flex; flex-direction:column; gap:4px;">
+        <input type="text" id="edit-input-${msgId}" value="${esc(currentText)}" style="margin:0; padding:4px 8px; font-size:14px;" />
+        <div style="display:flex; gap:6px;">
+          <button class="btn" style="padding:2px 8px; font-size:11px;" data-save-msg="${msgId}">Save</button>
+          <button class="btn light" style="padding:2px 8px; font-size:11px;" data-cancel-msg="${msgId}">Cancel</button>
+        </div>
+      </div>
+    `;
+  }
+
+  const cancelMsgBtn = e.target.closest('[data-cancel-msg]');
+  if(cancelMsgBtn) {
+    loadMessages();
+  }
+
+  const saveMsgBtn = e.target.closest('[data-save-msg]');
+  if(saveMsgBtn) {
+    const msgId = saveMsgBtn.dataset.saveMsg;
+    const newText = $(`edit-input-${msgId}`).value.trim();
+    if(!newText) { alert('Message cannot be empty'); return; }
+    try {
+      const {error} = await supabaseClient.from('messages').update({ content: newText }).eq('id', msgId).eq('sender_id', currentUser.id);
+      if(error) throw error;
+      await loadMessages();
+    } catch(err) {
+      alert('Failed to update message: ' + err.message);
+    }
+  }
+
+  const deleteMsgBtn = e.target.closest('[data-delete-msg]');
+  if(deleteMsgBtn) {
+    const msgId = deleteMsgBtn.dataset.deleteMsg;
+    if(confirm('Are you sure you want to delete this message?')) {
+      try {
+        const {error} = await supabaseClient.from('messages').delete().eq('id', msgId).eq('sender_id', currentUser.id);
+        if(error) throw error;
+        await loadMessages();
+      } catch(err) {
+        alert('Failed to delete message: ' + err.message);
+      }
+    }
+  }
+});
+
 $('groupChatTabBtn').addEventListener('click', () => {
   activeChatMode = 'group';
   activeDirectUser = null;
@@ -426,7 +519,7 @@ $('privateChatTabBtn').addEventListener('click', () => {
   alert("আপনার Friends List থেকে যার সাথে চ্যাট করতে চান তার নামের পাশে '💬 Chat' বাটনে ক্লিক করুন।");
 });
 
-$('saveProfileBtn').addEventListener('click',async()=>{
+  $('saveProfileBtn').addEventListener('click',async()=>{
   const full_name=$('profileName').value.trim(),bio=$('profileBio').value.trim();
   const avatarFile=$('avatarFile').files[0];
   if(!full_name){$('profileStatus').textContent='Please enter full name.';return;}
@@ -456,7 +549,7 @@ $('saveProfileBtn').addEventListener('click',async()=>{
   }catch(e){$('profileStatus').textContent='Save failed: '+e.message;}
   finally{$('saveProfileBtn').disabled=false;}
 }); 
-  
+
 $('loginBtn').addEventListener('click',async()=>{
   const email=$('email').value.trim(),password=$('password').value;
   if(!email||!password){authMessage('Please enter email and password.');return;}
@@ -701,4 +794,6 @@ if('serviceWorker'in navigator)navigator.serviceWorker.register('./sw.js').catch
 </script> 
 </body> 
 </html>
-  
+
+
+
